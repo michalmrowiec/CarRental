@@ -14,14 +14,14 @@
         public bool IsVehicleReturned { get; set; }
         public decimal NetAmount { get; set; }
         public decimal VatRate { get; set; }
-        public decimal Discount { get; set; }
+        public decimal DiscountRate { get; set; }
         public decimal TotalGrossAmount { get; set; }
         public bool IsPaid { get; set; }
         public string PaymentMethod { get; set; }
         public string Comments { get; set; }
 
-        public User? Client { get; set; }
-        public User? Employee { get; set; }
+        public Client? Client { get; set; }
+        public Employee? Employee { get; set; }
         public Vehicle? Vehicle { get; set; }
     }
 }
