@@ -1,3 +1,4 @@
+using CarRental;
 using CarRental.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,25 @@ builder.Services.AddDbContext<CarRentalContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
 });
 
+
 var app = builder.Build();
+
+// Automatic sending of pending migrations to the database
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<CarRentalContext>();
+var pendingMigrations = dbContext.Database.GetPendingMigrations();
+if (pendingMigrations.Any())
+{
+    dbContext.Database.Migrate();
+}
+
+// Insert test data to db
+var vehicles = dbContext.Vehicles.ToList();
+if (!vehicles.Any())
+{
+    dbContext.Vehicles.AddRange(TestDataSeeder.GetTestVehiclesData());
+    dbContext.SaveChanges();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
