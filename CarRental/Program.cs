@@ -1,16 +1,23 @@
 using CarRental;
 using CarRental.Entities;
 using CarRental.Infrastructure;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllersWithViews().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 var authenticationSettings = new AuthenticationSettings();
 builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
@@ -34,15 +41,12 @@ builder.Services.AddAuthentication(option =>
 });
 
 builder.Services.AddSingleton(authenticationSettings);
-
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDbContext<CarRentalContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
 });
-
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -56,10 +60,14 @@ if (pendingMigrations.Any())
 }
 
 // Insert test data to db
-var vehicles = dbContext.Vehicles.ToList();
-if (!vehicles.Any())
+if (!dbContext.Vehicles.Any() && !dbContext.Insurances.Any() && !dbContext.Employees.Any() && !dbContext.Clients.Any() && !dbContext.Rentals.Any() && !dbContext.VehicleServices.Any())
 {
     dbContext.Vehicles.AddRange(TestDataSeeder.GetTestVehiclesData());
+    dbContext.Insurances.AddRange(TestDataSeeder.GetTestInsurancesData());
+    dbContext.Employees.AddRange(TestDataSeeder.GetTestEmployeesData());
+    dbContext.Clients.AddRange(TestDataSeeder.GetTestClientsData());
+    dbContext.Rentals.AddRange(TestDataSeeder.GetTestRentalsData());
+    dbContext.VehicleServices.AddRange(TestDataSeeder.GetTestVehicleServicesData());
     dbContext.SaveChanges();
 }
 

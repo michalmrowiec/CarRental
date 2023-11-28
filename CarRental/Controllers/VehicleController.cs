@@ -21,9 +21,7 @@ namespace CarRental.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Vehicle>>> GetAllVehicles()
         {
-            return Ok(await _context.Vehicles.ToListAsync());
+            return Ok(await _context.Vehicles.Include(v => v.Rentals).Include(v => v.Insurances).Include(v => v.VehicleServices).ToListAsync());
         }
-
-
     }
 }
