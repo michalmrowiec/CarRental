@@ -1,10 +1,13 @@
 using CarRental;
-using CarRental.Entities;
+using CarRental.Application.Contracts;
+using CarRental.Domain.Entities;
 using CarRental.Infrastructure;
-using Microsoft.AspNetCore.Http.Json;
+using CarRental.Infrastructure.Ropositories;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -12,7 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
@@ -41,12 +46,15 @@ builder.Services.AddAuthentication(option =>
 });
 
 builder.Services.AddSingleton(authenticationSettings);
+
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDbContext<CarRentalContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
 });
+
+builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
 var app = builder.Build();
 

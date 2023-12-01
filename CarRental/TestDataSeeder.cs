@@ -1,4 +1,4 @@
-﻿using CarRental.Entities;
+﻿using CarRental.Domain.Entities;
 using Newtonsoft.Json;
 
 namespace CarRental

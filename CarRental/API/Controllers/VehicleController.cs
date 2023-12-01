@@ -1,9 +1,9 @@
-﻿using CarRental.Entities;
+﻿using CarRental.Domain.Entities;
 using CarRental.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarRental.Controllers
+namespace CarRental.API.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
