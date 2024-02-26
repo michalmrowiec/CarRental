@@ -2,7 +2,7 @@
 
 namespace CarRental.Application.Functions.Users.Commands.Register
 {
-    public class RegisterClientCommand : IRequest<RegisterClientResponse>
+    public class RegisterClientCommand : IRequest<UserResponse>
     {
         public string Name { get; set; }
         public string LastName { get; set; }

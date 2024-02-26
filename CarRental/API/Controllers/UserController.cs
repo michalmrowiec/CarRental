@@ -1,4 +1,5 @@
 ﻿using CarRental.Application.Functions.Users;
+using CarRental.Application.Functions.Users.Commands.Login;
 using CarRental.Application.Functions.Users.Commands.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,17 @@ namespace CarRental.API.Controllers
         public async Task<ActionResult<JwtToken>> Register([FromBody] RegisterClientCommand registerCommand)
         {
             var result = await _mediator.Send(registerCommand);
+
+            if (result.Success)
+                return Ok(result.JwtToken);
+
+            return BadRequest(result.ValidationErrors);
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<JwtToken>> Login([FromBody] LoginCommand loginCommand)
+        {
+            var result = await _mediator.Send(loginCommand);
 
             if (result.Success)
                 return Ok(result.JwtToken);

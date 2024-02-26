@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CarRental.Application.Functions.Users.Commands.Register
 {
-    public class RegisterClientCommandHandler : IRequestHandler<RegisterClientCommand, RegisterClientResponse>
+    public class RegisterClientCommandHandler : IRequestHandler<RegisterClientCommand, UserResponse>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -23,20 +23,20 @@ namespace CarRental.Application.Functions.Users.Commands.Register
             _mediator = mediator;
         }
 
-        public async Task<RegisterClientResponse> Handle(RegisterClientCommand request, CancellationToken cancellationToken)
+        public async Task<UserResponse> Handle(RegisterClientCommand request, CancellationToken cancellationToken)
         {
             RegisterValidator validator = new(_mediator);
             var validationResult = validator.Validate(request);
 
             if (!validationResult.IsValid)
             {
-                return new RegisterClientResponse(validationResult);
+                return new UserResponse(validationResult);
             }
 
             Client clientToAdd = _mapper.Map<Client>(request);
             clientToAdd.Id = new Guid();
             clientToAdd.PasswordHash = _passwordHasher.HashPassword(clientToAdd, request.Password);
-            clientToAdd.Role = "Klient";
+            clientToAdd.Role = "customer";
             clientToAdd.CreatedAt = DateTime.UtcNow;
             clientToAdd.UpdatedAt = DateTime.UtcNow;
             clientToAdd.IsActive = true;
@@ -46,17 +46,18 @@ namespace CarRental.Application.Functions.Users.Commands.Register
 
             if (addedUser == null)
             {
-                return new RegisterClientResponse(false, "Something went wrong.");
+                return new UserResponse(false, "Something went wrong.");
             }
 
             JwtTokenService tokenService = new(_authenticationSettings);
             JwtToken jwtToken = new()
             {
                 UserEmail = request.EmailAddress,
+                Role = clientToAdd.Role,
                 Token = tokenService.GenerateJwt(addedUser)
             };
 
-            return new RegisterClientResponse(jwtToken);
+            return new UserResponse(jwtToken);
 
         }
     }
