@@ -26,6 +26,7 @@
         public decimal RentalNetPricePerDay { get; set; }
         public string Currency { get; set; }
         public decimal VatRate { get; set; }
+        public string? ImageUrls { get; set; } // URLs separated by ;
 
         public IList<Insurance>? Insurances { get; set; }
         public IList<VehicleService>? VehicleServices { get; set; }

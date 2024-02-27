@@ -1,13 +1,14 @@
 ﻿using MediatR;
 
-namespace CarRental.Application.Functions.Users.Commands.Register
+namespace CarRental.Application.Functions.Users.Commands.AddEmployee
 {
-    public class RegisterClientCommand : IRequest<UserResponse>
+    public class AddEmployeeCommand : IRequest<UserResponse>
     {
         public string Name { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
+        public string Role { get; set; }
         public string EmailAddress { get; set; }
         public string Password { get; set; }
         public string RepeatPassword { get; set; }

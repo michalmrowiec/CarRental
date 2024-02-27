@@ -408,11 +408,11 @@ namespace CarRental.Migrations
                     b.ToTable("VehicleServices");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Client", b =>
+            modelBuilder.Entity("CarRental.Entities.Customer", b =>
                 {
                     b.HasBaseType("CarRental.Entities.User");
 
-                    b.HasDiscriminator().HasValue("Client");
+                    b.HasDiscriminator().HasValue("Customer");
                 });
 
             modelBuilder.Entity("CarRental.Entities.Employee", b =>
@@ -449,7 +449,7 @@ namespace CarRental.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRental.Entities.Client", "Client")
+                    b.HasOne("CarRental.Entities.Customer", "Customer")
                         .WithMany("Rentals")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -461,7 +461,7 @@ namespace CarRental.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.Navigation("Customer");
 
                     b.Navigation("Employee");
 
@@ -496,7 +496,7 @@ namespace CarRental.Migrations
                     b.Navigation("VehicleServices");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Client", b =>
+            modelBuilder.Entity("CarRental.Entities.Customer", b =>
                 {
                     b.Navigation("Rentals");
                 });

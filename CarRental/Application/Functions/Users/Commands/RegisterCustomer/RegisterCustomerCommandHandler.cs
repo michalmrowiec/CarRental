@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CarRental.Application.Functions.Users.Commands.Register
 {
-    public class RegisterClientCommandHandler : IRequestHandler<RegisterClientCommand, UserResponse>
+    public class RegisterCustomerCommandHandler : IRequestHandler<RegisterCustomerCommand, UserResponse>
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -14,7 +14,7 @@ namespace CarRental.Application.Functions.Users.Commands.Register
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IMediator _mediator;
 
-        public RegisterClientCommandHandler(IUserRepository userRepository, IMapper mapper, AuthenticationSettings authenticationSettings, IPasswordHasher<User> passwordHasher, IMediator mediator)
+        public RegisterCustomerCommandHandler(IUserRepository userRepository, IMapper mapper, AuthenticationSettings authenticationSettings, IPasswordHasher<User> passwordHasher, IMediator mediator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
@@ -23,7 +23,7 @@ namespace CarRental.Application.Functions.Users.Commands.Register
             _mediator = mediator;
         }
 
-        public async Task<UserResponse> Handle(RegisterClientCommand request, CancellationToken cancellationToken)
+        public async Task<UserResponse> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
         {
             RegisterValidator validator = new(_mediator);
             var validationResult = validator.Validate(request);
@@ -33,7 +33,7 @@ namespace CarRental.Application.Functions.Users.Commands.Register
                 return new UserResponse(validationResult);
             }
 
-            Client clientToAdd = _mapper.Map<Client>(request);
+            Customer clientToAdd = _mapper.Map<Customer>(request);
             clientToAdd.Id = new Guid();
             clientToAdd.PasswordHash = _passwordHasher.HashPassword(clientToAdd, request.Password);
             clientToAdd.Role = "customer";

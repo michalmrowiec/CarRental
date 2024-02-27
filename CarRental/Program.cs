@@ -67,13 +67,19 @@ if (pendingMigrations.Any())
     dbContext.Database.Migrate();
 }
 
+if(!dbContext.Employees.Any(e => e.Role == "admin"))
+{
+    var csr = new CreateStartAdmin(scope.ServiceProvider.GetRequiredService<IMediator>());
+    await csr.Create();
+}
+
 // Insert test data to db
-if (!dbContext.Vehicles.Any() && !dbContext.Insurances.Any() && !dbContext.Employees.Any() && !dbContext.Clients.Any() && !dbContext.Rentals.Any() && !dbContext.VehicleServices.Any())
+if (!dbContext.Vehicles.Any() && !dbContext.Insurances.Any() && !dbContext.Employees.Any() && !dbContext.Customers.Any() && !dbContext.Rentals.Any() && !dbContext.VehicleServices.Any())
 {
     dbContext.Vehicles.AddRange(TestDataSeeder.GetTestVehiclesData());
     dbContext.Insurances.AddRange(TestDataSeeder.GetTestInsurancesData());
     dbContext.Employees.AddRange(TestDataSeeder.GetTestEmployeesData());
-    dbContext.Clients.AddRange(TestDataSeeder.GetTestClientsData());
+    dbContext.Customers.AddRange(TestDataSeeder.GetTestClientsData());
     dbContext.Rentals.AddRange(TestDataSeeder.GetTestRentalsData());
     dbContext.VehicleServices.AddRange(TestDataSeeder.GetTestVehicleServicesData());
     dbContext.SaveChanges();

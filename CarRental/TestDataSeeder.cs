@@ -199,7 +199,7 @@ namespace CarRental
                     Id = Guid.Parse("e4a1089a-c667-4d68-9610-5d58f19e5342"),
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    Role = "Manager",
+                    Role = "manager",
                     Name = "Jan",
                     LastName = "Kowalski",
                     DateOfBirth = new DateTime(1980, 1, 1),
@@ -222,7 +222,7 @@ namespace CarRental
                     Id = Guid.Parse("e3085579-5632-4ebe-9e04-4935f745c361"),
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    Role = "Pracownik",
+                    Role = "employee",
                     Name = "Anna",
                     LastName = "Nowak",
                     DateOfBirth = new DateTime(1990, 1, 1),
@@ -243,16 +243,16 @@ namespace CarRental
             };
         }
 
-        internal static Client[] GetTestClientsData()
+        internal static Customer[] GetTestClientsData()
         {
-            return new Client[]
+            return new Customer[]
             {
-                new Client
+                new Customer
                 {
                     Id = Guid.Parse("aef40405-6d1c-468a-a002-cdd32c826a8b"),
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    Role = "Klient",
+                    Role = "customer",
                     Name = "Piotr",
                     LastName = "Zieliński",
                     DateOfBirth = new DateTime(1985, 5, 5),
@@ -270,12 +270,12 @@ namespace CarRental
                     IsActive = true
                 },
 
-                new Client
+                new Customer
                 {
                     Id = Guid.Parse("bc4f89d9-8470-4d18-8337-dec8f48f78df"),
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    Role = "Klient",
+                    Role = "customer",
                     Name = "Maria",
                     LastName = "Kowalska",
                     DateOfBirth = new DateTime(1990, 6, 6),
@@ -293,12 +293,12 @@ namespace CarRental
                     IsActive = true
                 },
 
-                new Client
+                new Customer
                 {
                     Id = Guid.Parse("273adeac-2c88-426d-92f8-09e13f60e06d"),
                     CreatedAt = DateTime.Now,
                     UpdatedAt = DateTime.Now,
-                    Role = "Klient",
+                    Role = "customer",
                     Name = "Tomasz",
                     LastName = "Nowak",
                     DateOfBirth = new DateTime(1980, 7, 7),

@@ -1,7 +1,9 @@
 ﻿using CarRental.Application.Functions.Users;
+using CarRental.Application.Functions.Users.Commands.AddEmployee;
 using CarRental.Application.Functions.Users.Commands.Login;
 using CarRental.Application.Functions.Users.Commands.Register;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
@@ -20,7 +22,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<JwtToken>> Register([FromBody] RegisterClientCommand registerCommand)
+        public async Task<ActionResult<JwtToken>> Register([FromBody] RegisterCustomerCommand registerCommand)
         {
             var result = await _mediator.Send(registerCommand);
 
@@ -37,6 +39,18 @@ namespace CarRental.API.Controllers
 
             if (result.Success)
                 return Ok(result.JwtToken);
+
+            return BadRequest(result.ValidationErrors);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost("add-employee")]
+        public async Task<ActionResult<JwtToken>> AddEmployee([FromBody] AddEmployeeCommand addEmployee)
+        {
+            var result = await _mediator.Send(addEmployee);
+
+            if (result.Success)
+                return Created("", null);
 
             return BadRequest(result.ValidationErrors);
         }

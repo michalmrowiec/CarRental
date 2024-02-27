@@ -9,7 +9,7 @@ namespace CarRental.Infrastructure
         { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Client> Clients { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Rental> Rentals { get; set; }

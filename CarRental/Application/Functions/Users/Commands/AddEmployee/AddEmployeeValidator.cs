@@ -1,14 +1,15 @@
-﻿using CarRental.Application.Functions.Users.Queries.CheckUserIsExist;
+﻿using CarRental.Application.Functions.Users.Commands.Register;
+using CarRental.Application.Functions.Users.Queries.CheckUserIsExist;
 using FluentValidation;
 using MediatR;
 
-namespace CarRental.Application.Functions.Users.Commands.Register
+namespace CarRental.Application.Functions.Users.Commands.AddEmployee
 {
-    public class RegisterValidator : AbstractValidator<RegisterClientCommand>
+    public class AddEmployeeValidator : AbstractValidator<AddEmployeeCommand>
     {
         private readonly IMediator _mediator;
 
-        public RegisterValidator(IMediator mediator)
+        public AddEmployeeValidator(IMediator mediator)
         {
             _mediator = mediator;
 
@@ -48,6 +49,21 @@ namespace CarRental.Application.Functions.Users.Commands.Register
                     if (value.AddYears(18) > DateTime.Today)
                     {
                         context.AddFailure("{PropertyName}", "You must be at least 18 years old.");
+                    }
+                });
+
+            RuleFor(r => r.Role)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("{PropertyName} is required")
+                .Custom((value, context) =>
+                {
+                    var roles = new List<string> { "admin", "manager", "employee" };
+                    
+                    if(!roles.Contains(value))
+                    {
+                        context.AddFailure("{PropertyName}",
+                            "Invalid role. The employee role can have the following values: admin, manager, employee.");
                     }
                 });
         }

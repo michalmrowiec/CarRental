@@ -1,6 +1,6 @@
 ﻿namespace CarRental.Domain.Entities
 {
-    public class Client : User
+    public class Customer : User
     {
         public IList<Rental>? Rentals { get; set; }
     }

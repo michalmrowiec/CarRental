@@ -20,7 +20,7 @@
         public string PaymentMethod { get; set; }
         public string Comments { get; set; }
 
-        public Client? Client { get; set; }
+        public Customer? Client { get; set; }
         public Employee? Employee { get; set; }
         public Vehicle? Vehicle { get; set; }
     }
