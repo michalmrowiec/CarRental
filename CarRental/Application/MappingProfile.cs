@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarRental.Application.Functions.Users.Commands.AddEmployee;
 using CarRental.Application.Functions.Users.Commands.Register;
+using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
 using CarRental.Domain.Entities;
 
 namespace CarRental.Application
@@ -9,11 +10,11 @@ namespace CarRental.Application
     {
         public MappingProfile()
         {
-            CreateMap<RegisterCustomerCommand, Customer>()
-                .ReverseMap();
+            CreateMap<RegisterCustomerCommand, Customer>();
 
-            CreateMap<AddEmployeeCommand,  Employee>()
-                .ReverseMap();
+            CreateMap<AddEmployeeCommand,  Employee>();
+
+            CreateMap<AddVehicleCommand, Vehicle>();
         }
     }
 }

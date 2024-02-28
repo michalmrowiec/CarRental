@@ -1,10 +1,10 @@
-﻿namespace CarRental.Domain.Entities
+﻿using CarRental.Domain.Entities;
+using MediatR;
+
+namespace CarRental.Application.Functions.Vehicles.Commands.AddVehicle
 {
-    public class Vehicle
+    public class AddVehicleCommand : IRequest<ResponseBase<Vehicle>>
     {
-        public Guid Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
         public string VinNumber { get; set; }
         public string LicensePlate { get; set; }
         public string Brand { get; set; }
@@ -27,10 +27,5 @@
         public decimal RentalNetPricePerDay { get; set; }
         public string Currency { get; set; }
         public decimal VatRate { get; set; }
-        public string? ImageUrls { get; set; } // URLs separated by ;
-
-        public IList<Insurance>? Insurances { get; set; }
-        public IList<VehicleService>? VehicleServices { get; set; }
-        public IList<Rental>? Rentals { get; set; }
     }
 }

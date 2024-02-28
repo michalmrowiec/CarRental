@@ -55,6 +55,7 @@ builder.Services.AddDbContext<CarRentalContext>(options =>
 });
 
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+builder.Services.AddScoped(typeof(IVehicleRepository), typeof(VehicleRepository));
 
 var app = builder.Build();
 

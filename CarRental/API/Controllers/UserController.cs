@@ -13,9 +13,9 @@ namespace CarRental.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ILogger<VehicleController> _logger;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(ILogger<VehicleController> logger, IMediator mediator)
+        public UserController(ILogger<UserController> logger, IMediator mediator)
         {
             _mediator = mediator;
             _logger = logger;
