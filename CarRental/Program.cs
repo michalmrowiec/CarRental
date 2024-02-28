@@ -1,10 +1,13 @@
 using CarRental;
-using CarRental.Entities;
+using CarRental.Application.Contracts;
+using CarRental.Domain.Entities;
 using CarRental.Infrastructure;
-using Microsoft.AspNetCore.Http.Json;
+using CarRental.Infrastructure.Ropositories;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -12,7 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
@@ -41,12 +46,16 @@ builder.Services.AddAuthentication(option =>
 });
 
 builder.Services.AddSingleton(authenticationSettings);
+
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDbContext<CarRentalContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
 });
+
+builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+builder.Services.AddScoped(typeof(IVehicleRepository), typeof(VehicleRepository));
 
 var app = builder.Build();
 
@@ -59,13 +68,19 @@ if (pendingMigrations.Any())
     dbContext.Database.Migrate();
 }
 
+if(!dbContext.Employees.Any(e => e.Role == "admin"))
+{
+    var csr = new CreateStartAdmin(scope.ServiceProvider.GetRequiredService<IMediator>());
+    await csr.Create();
+}
+
 // Insert test data to db
-if (!dbContext.Vehicles.Any() && !dbContext.Insurances.Any() && !dbContext.Employees.Any() && !dbContext.Clients.Any() && !dbContext.Rentals.Any() && !dbContext.VehicleServices.Any())
+if (!dbContext.Vehicles.Any() && !dbContext.Insurances.Any() && !dbContext.Employees.Any() && !dbContext.Customers.Any() && !dbContext.Rentals.Any() && !dbContext.VehicleServices.Any())
 {
     dbContext.Vehicles.AddRange(TestDataSeeder.GetTestVehiclesData());
     dbContext.Insurances.AddRange(TestDataSeeder.GetTestInsurancesData());
     dbContext.Employees.AddRange(TestDataSeeder.GetTestEmployeesData());
-    dbContext.Clients.AddRange(TestDataSeeder.GetTestClientsData());
+    dbContext.Customers.AddRange(TestDataSeeder.GetTestClientsData());
     dbContext.Rentals.AddRange(TestDataSeeder.GetTestRentalsData());
     dbContext.VehicleServices.AddRange(TestDataSeeder.GetTestVehicleServicesData());
     dbContext.SaveChanges();

@@ -1,4 +1,4 @@
-﻿namespace CarRental.Entities
+﻿namespace CarRental.Domain.Entities
 {
     public class Rental
     {
@@ -20,7 +20,7 @@
         public string PaymentMethod { get; set; }
         public string Comments { get; set; }
 
-        public Client? Client { get; set; }
+        public Customer? Client { get; set; }
         public Employee? Employee { get; set; }
         public Vehicle? Vehicle { get; set; }
     }
