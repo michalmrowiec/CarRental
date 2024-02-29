@@ -1,4 +1,5 @@
-﻿using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
+﻿using CarRental.Application.Functions.Vehicles.Commands.AddImage;
+using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
 using CarRental.Domain.Entities;
 using CarRental.Infrastructure;
 using MediatR;
@@ -39,6 +40,23 @@ namespace CarRental.API.Controllers
                 return Created("", result.ReturnedObj);
 
             return BadRequest(result.ValidationErrors);
+        }
+
+        [Authorize(Roles = "admin,manager,employee")]
+        [HttpPost("upload-image/{vehicleId}")]
+        public async Task<ActionResult> UploadImage(IFormFile file, [FromRoute] Guid vehicleId)
+        {
+            byte[] imageData;
+            using MemoryStream memoryStream = new();
+            await file.CopyToAsync(memoryStream);
+            imageData = memoryStream.ToArray();
+
+            var result = await _mediator.Send(new AddImageCommand(imageData, file.FileName, vehicleId));
+
+            if (result.Success)
+                return Created(result.ReturnedObj ?? "", null);
+
+            return BadRequest(result.Message);
         }
     }
 }

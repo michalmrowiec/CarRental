@@ -1,9 +1,7 @@
-﻿using CarRental.Application.Contracts;
-using CarRental.Application.Functions.Users.Commands.Register;
-using CarRental.Application.Functions.Users.Commands;
+﻿using AutoMapper;
+using CarRental.Application.Contracts;
 using CarRental.Domain.Entities;
 using MediatR;
-using AutoMapper;
 
 namespace CarRental.Application.Functions.Vehicles.Commands.AddVehicle
 {

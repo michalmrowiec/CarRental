@@ -1,8 +1,10 @@
 using CarRental;
 using CarRental.Application.Contracts;
+using CarRental.Application.Contracts.Files;
 using CarRental.Domain.Entities;
 using CarRental.Infrastructure;
 using CarRental.Infrastructure.Ropositories;
+using CarRental.Infrastructure.Ropositories.Files;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +58,7 @@ builder.Services.AddDbContext<CarRentalContext>(options =>
 
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 builder.Services.AddScoped(typeof(IVehicleRepository), typeof(VehicleRepository));
+builder.Services.AddScoped(typeof(IFileRepository), typeof(ServerStaticFileRepository));
 
 var app = builder.Build();
 
