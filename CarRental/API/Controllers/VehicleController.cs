@@ -1,11 +1,12 @@
 ﻿using CarRental.Application.Functions.Vehicles.Commands.AddImage;
 using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
+using CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredVehicles;
 using CarRental.Domain.Entities;
-using CarRental.Infrastructure;
+using CarRental.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Sieve.Models;
 
 namespace CarRental.API.Controllers
 {
@@ -14,20 +15,37 @@ namespace CarRental.API.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly ILogger<VehicleController> _logger;
-        private readonly CarRentalContext _context;
         private readonly IMediator _mediator;
 
-        public VehicleController(ILogger<VehicleController> logger, CarRentalContext carRentalContext, IMediator mediator)
+        public VehicleController(ILogger<VehicleController> logger, IMediator mediator)
         {
             _logger = logger;
-            _context = carRentalContext;
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Vehicle>>> GetAllVehicles()
+        [HttpPost("get-filtered")]
+        public async Task<ActionResult<PagedResult<Vehicle>>> GetSortedAndFilteredVehicles([FromBody] SieveModel sieveModel)
         {
-            return Ok(await _context.Vehicles.Include(v => v.Rentals).Include(v => v.Insurances).Include(v => v.VehicleServices).ToListAsync());
+            var result = await _mediator.Send(new GetSortedAndFilteredVehiclesQuery(sieveModel));
+
+            if (result.Success)
+                return Ok(result.ReturnedObj);
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpOptions("get-filtered")]
+        public ActionResult<string> OptionsOfGetSortedAndFilteredVehicles()
+        {
+            var options =
+                @"?sorts=     LikeCount,CommentCount,-created         // sort by likes, then comments, then descendingly by date created 
+&filters=   LikeCount>10, Title@=awesome title,     // filter to posts with more than 10 likes, and a title that contains the phrase ""awesome title""
+&page=      1                                       // get the first page...
+&pageSize=  10                                      // ...which contains 10 posts
+
+More info you can find here: github.com/Biarity/Sieve#send-a-request";
+
+            return Ok(options);
         }
 
         [Authorize(Roles = "admin,manager,employee")]

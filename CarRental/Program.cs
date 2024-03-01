@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Sieve.Services;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -56,6 +57,8 @@ builder.Services.AddDbContext<CarRentalContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
 });
+
+builder.Services.AddScoped<ISieveProcessor, CarRentalSieveProcessor>();
 
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 builder.Services.AddScoped(typeof(IVehicleRepository), typeof(VehicleRepository));
