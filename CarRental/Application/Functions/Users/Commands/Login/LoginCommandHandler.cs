@@ -38,14 +38,14 @@ namespace CarRental.Application.Functions.Users.Commands.Login
 
             if (user == null)
             {
-                return new UserResponse(false, "Email address or password are wrong.");
+                return new UserResponse(false, "Email address or password are wrong.", ResponseBase.ResponseStatus.NotFound);
             }
 
             var veryfication = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
             if (veryfication == PasswordVerificationResult.Failed)
             {
-                return new UserResponse(false, "Email address or password are wrong.");
+                return new UserResponse(false, "Email address or password are wrong.", ResponseBase.ResponseStatus.NotFound);
             }
 
             JwtTokenService tokenService = new(_authenticationSettings);

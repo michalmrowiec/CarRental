@@ -46,7 +46,7 @@ namespace CarRental.Application.Functions.Users.Commands.Register
 
             if (addedUser == null)
             {
-                return new UserResponse(false, "Something went wrong.");
+                return new UserResponse(false, "Something went wrong.", ResponseBase.ResponseStatus.Error);
             }
 
             JwtTokenService tokenService = new(_authenticationSettings);

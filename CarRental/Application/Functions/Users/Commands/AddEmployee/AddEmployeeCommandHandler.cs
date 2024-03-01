@@ -45,10 +45,10 @@ namespace CarRental.Application.Functions.Users.Commands.AddEmployee
 
             if (addedUser == null)
             {
-                return new UserResponse(false, "Something went wrong.");
+                return new UserResponse(false, "Something went wrong.", ResponseBase.ResponseStatus.Error);
             }
 
-            return new UserResponse(true, "Employee added.");
+            return new UserResponse(true, "Employee added.", ResponseBase.ResponseStatus.Success);
         }
     }
 }

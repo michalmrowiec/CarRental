@@ -11,9 +11,7 @@ namespace CarRental.Application.Functions.Users.Commands
             Success = true;
             ValidationErrors = new();
         }
-        public UserResponse(bool status, string message) : base(status, message)
-        { }
-        public UserResponse(bool success, string? message, ValidationResult validationResult) : base(success, message, validationResult)
+        public UserResponse(bool status, string message, ResponseStatus responseStatus) : base(status, message, responseStatus)
         { }
 
         public UserResponse(ValidationResult validationResult) : base(validationResult)

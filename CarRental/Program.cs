@@ -1,12 +1,16 @@
 using CarRental;
 using CarRental.Application.Contracts;
+using CarRental.Application.Contracts.Files;
 using CarRental.Domain.Entities;
 using CarRental.Infrastructure;
 using CarRental.Infrastructure.Ropositories;
+using CarRental.Infrastructure.Ropositories.Files;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Sieve.Services;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -54,8 +58,11 @@ builder.Services.AddDbContext<CarRentalContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
 });
 
+builder.Services.AddScoped<ISieveProcessor, CarRentalSieveProcessor>();
+
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 builder.Services.AddScoped(typeof(IVehicleRepository), typeof(VehicleRepository));
+builder.Services.AddScoped(typeof(IFileRepository), typeof(ServerStaticFileRepository));
 
 var app = builder.Build();
 
@@ -68,7 +75,7 @@ if (pendingMigrations.Any())
     dbContext.Database.Migrate();
 }
 
-if(!dbContext.Employees.Any(e => e.Role == "admin"))
+if (!dbContext.Employees.Any(e => e.Role == "admin"))
 {
     var csr = new CreateStartAdmin(scope.ServiceProvider.GetRequiredService<IMediator>());
     await csr.Create();
@@ -99,7 +106,12 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarRentalAP
 app.UseAuthentication();
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "src", "images")),
+    RequestPath = "/images"
+});
 app.UseRouting();
 
 app.UseAuthorization();

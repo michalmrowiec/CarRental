@@ -2,6 +2,7 @@
 using CarRental.Application.Functions.Users.Commands.AddEmployee;
 using CarRental.Application.Functions.Users.Commands.Register;
 using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
+using CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle;
 using CarRental.Domain.Entities;
 
 namespace CarRental.Application
@@ -12,7 +13,7 @@ namespace CarRental.Application
         {
             CreateMap<RegisterCustomerCommand, Customer>();
 
-            CreateMap<AddEmployeeCommand,  Employee>();
+            CreateMap<AddEmployeeCommand, Employee>();
 
             CreateMap<AddVehicleCommand, Vehicle>();
         }
