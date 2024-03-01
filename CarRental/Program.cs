@@ -8,6 +8,7 @@ using CarRental.Infrastructure.Ropositories.Files;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
@@ -71,7 +72,7 @@ if (pendingMigrations.Any())
     dbContext.Database.Migrate();
 }
 
-if(!dbContext.Employees.Any(e => e.Role == "admin"))
+if (!dbContext.Employees.Any(e => e.Role == "admin"))
 {
     var csr = new CreateStartAdmin(scope.ServiceProvider.GetRequiredService<IMediator>());
     await csr.Create();
@@ -102,7 +103,12 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarRentalAP
 app.UseAuthentication();
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "src", "images")),
+    RequestPath = "/images"
+});
 app.UseRouting();
 
 app.UseAuthorization();

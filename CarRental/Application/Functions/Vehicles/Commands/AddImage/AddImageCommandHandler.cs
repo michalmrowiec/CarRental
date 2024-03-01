@@ -35,13 +35,14 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddImage
                 return new ResponseBase<string>(false, "A file with this name already exists.");
             }
 
-            var filePath = await _fileRepository.SaveFileAsync(FileType.VehicleImage, request.ImageData, request.FileName) + ';';
+            var filePath = await _fileRepository.SaveFileAsync(FileType.VehicleImage, request.ImageData, request.FileName);
 
-            var updateVehicleCommand = new UpdateVehicleCommand();
-
-            updateVehicleCommand.Id = vehicle.Id;
-            updateVehicleCommand.ImageUrls = vehicle.ImageUrls == null ?
-                filePath : string.Concat(vehicle.ImageUrls, filePath);
+            var updateVehicleCommand = new UpdateVehicleCommand
+            {
+                Id = vehicle.Id,
+                ImageUrls = vehicle.ImageUrls == null ?
+                string.Concat(filePath, ';') : string.Concat(vehicle.ImageUrls, filePath, ';')
+            };
 
             var result = await _mediator.Send(updateVehicleCommand, cancellationToken);
 

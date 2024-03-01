@@ -60,7 +60,7 @@ namespace CarRental.Infrastructure.Ropositories.Files
                 return "";
             }
 
-            return Path.Combine(fileType.ToString(), fileName); ;
+            return Path.Combine("images", fileType.ToString(), fileName); ;
         }
     }
 }
