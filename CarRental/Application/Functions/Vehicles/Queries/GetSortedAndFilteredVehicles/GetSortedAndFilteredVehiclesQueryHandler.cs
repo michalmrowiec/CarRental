@@ -24,7 +24,7 @@ namespace CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredV
             }
             catch (Exception)
             {
-                return new ResponseBase<PagedResult<Vehicle>>(false, "Vehicle does not exist.");
+                return new ResponseBase<PagedResult<Vehicle>>(false, "Vehicle does not exist.", ResponseBase.ResponseStatus.NotFound);
             }
 
             return new ResponseBase<PagedResult<Vehicle>>(result);

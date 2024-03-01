@@ -12,6 +12,28 @@ namespace CarRental.Infrastructure.Ropositories.Files
             _logger = logger;
         }
 
+        public DeleteStatus DeleteFile(string filePath)
+        {
+            filePath = Path.Combine("ClientApp", "src", filePath);
+            if (!File.Exists(filePath))
+            {
+                _logger.LogWarning("Try of delete file {FileName}, but file does not exists.", filePath);
+                return DeleteStatus.NotFound;
+            }
+
+            try
+            {
+                File.Delete(filePath);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unable to delete {FileName} file.", filePath);
+                return DeleteStatus.Error;
+            }
+
+            return DeleteStatus.Deleted;
+        }
+
         public async Task<byte[]> GetFileAsync(FileType fileType, string fileName)
         {
             byte[] fileData = Array.Empty<byte>();

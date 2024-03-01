@@ -23,7 +23,7 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddImage
 
             if (!vehicleResponse.Success || vehicleResponse.ReturnedObj == null)
             {
-                return new ResponseBase<string>(false, "Vehicle does not exist.");
+                return new ResponseBase<string>(false, "Vehicle does not exist.", ResponseBase.ResponseStatus.NotFound);
             }
 
             Vehicle vehicle = vehicleResponse.ReturnedObj;
@@ -32,7 +32,7 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddImage
 
             if (fileExist.Length != 0)
             {
-                return new ResponseBase<string>(false, "A file with this name already exists.");
+                return new ResponseBase<string>(false, "A file with this name already exists.", ResponseBase.ResponseStatus.BadQuery);
             }
 
             var filePath = await _fileRepository.SaveFileAsync(FileType.VehicleImage, request.ImageData, request.FileName);
@@ -48,7 +48,8 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddImage
 
             if (!result.Success || result.ReturnedObj == null)
             {
-                return new ResponseBase<string>(false, "Something went wrong.");
+                _fileRepository.DeleteFile(filePath);
+                return new ResponseBase<string>(false, "Something went wrong.", ResponseBase.ResponseStatus.Error);
             }
 
             return new ResponseBase<string>(filePath);

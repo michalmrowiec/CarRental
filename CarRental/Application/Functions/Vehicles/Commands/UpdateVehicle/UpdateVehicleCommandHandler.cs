@@ -26,7 +26,7 @@ namespace CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle
             if (!vehicleResponse.Success || vehicleResponse.ReturnedObj == null)
             {
                 _logger.LogWarning("Failed to update vehicle with ID: {VehicleId} - vehicle does not exist.", request.Id);
-                return new ResponseBase<Vehicle>(false, "Vehicle does not exist");
+                return new ResponseBase<Vehicle>(false, "Vehicle does not exist", ResponseBase.ResponseStatus.NotFound);
             }
 
             UpdateVehicleValidator validator = new();
@@ -41,17 +41,39 @@ namespace CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle
 
             Vehicle updatedVehicle;
 
+            vehicle.UpdatedAt = DateTime.UtcNow;
+            vehicle.VinNumber = request.VinNumber ?? vehicle.VinNumber;
+            vehicle.LicensePlate = request.LicensePlate ?? vehicle.LicensePlate;
+            vehicle.Brand = request.Brand ?? vehicle.Brand;
+            vehicle.Model = request.Model ?? vehicle.Model;
+            vehicle.YearOfProduction = request.YearOfProduction ?? vehicle.YearOfProduction;
+            vehicle.BodyType = request.BodyType ?? vehicle.BodyType;
+            vehicle.FuelType = request.FuelType ?? vehicle.FuelType;
+            vehicle.Color = request.Color ?? vehicle.Color;
+            vehicle.Mileage = request.Mileage ?? vehicle.Mileage;
+            vehicle.EngineSize = request.EngineSize ?? vehicle.EngineSize;
+            vehicle.EnginePower = request.EnginePower ?? vehicle.EnginePower;
+            vehicle.Torqe = request.Torqe ?? vehicle.Torqe;
+            vehicle.GearboxType = request.GearboxType ?? vehicle.GearboxType;
+            vehicle.Weight = request.Weight ?? vehicle.Weight;
+            vehicle.NumberOfDoors = request.NumberOfDoors ?? vehicle.NumberOfDoors;
+            vehicle.Seats = request.Seats ?? vehicle.Seats;
+            vehicle.CarEquipment = request.CarEquipment ?? vehicle.CarEquipment;
+            vehicle.IsAvailable = request.IsAvailable ?? vehicle.IsAvailable;
+            vehicle.NextCarInspection = request.NextCarInspection ?? vehicle.NextCarInspection;
+            vehicle.RentalNetPricePerDay = request.RentalNetPricePerDay ?? vehicle.RentalNetPricePerDay;
+            vehicle.Currency = request.Currency ?? vehicle.Currency;
+            vehicle.VatRate = request.VatRate ?? vehicle.VatRate;
+            vehicle.ImageUrls = request.ImageUrls ?? vehicle.ImageUrls;
+
             try
             {
-                var mappedVehicle = _mapper.Map(request, vehicle);
-                mappedVehicle.UpdatedAt = DateTime.UtcNow;
-
-                updatedVehicle = await _vehicleRepository.UpdateAsync(mappedVehicle);
+                updatedVehicle = await _vehicleRepository.UpdateAsync(vehicle);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to update vehicle with ID: {VehicleId}.", vehicle.Id);
-                return new ResponseBase<Vehicle>(false, "Something went wrong");
+                return new ResponseBase<Vehicle>(false, "Something went wrong", ResponseBase.ResponseStatus.Error);
             }
 
             return new ResponseBase<Vehicle>(updatedVehicle);

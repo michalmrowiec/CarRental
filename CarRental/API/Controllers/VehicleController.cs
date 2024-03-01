@@ -1,5 +1,7 @@
 ﻿using CarRental.Application.Functions.Vehicles.Commands.AddImage;
 using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
+using CarRental.Application.Functions.Vehicles.Commands.DeleteVehicle;
+using CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle;
 using CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredVehicles;
 using CarRental.Domain.Entities;
 using CarRental.Domain.Models;
@@ -73,6 +75,33 @@ More info you can find here: github.com/Biarity/Sieve#send-a-request";
 
             if (result.Success)
                 return Created(result.ReturnedObj ?? "", null);
+
+            return BadRequest(result.Message);
+        }
+
+        [Authorize(Roles = "admin,manager,employee")]
+        [HttpPut]
+        public async Task<ActionResult<Vehicle>> UpdateVehicle([FromBody] UpdateVehicleCommand updateVehicleCommand)
+        {
+            var result = await _mediator.Send(updateVehicleCommand);
+
+            if (result.Success)
+                return Ok(result.ReturnedObj);
+
+            if (result.Status == Application.Functions.ResponseBase.ResponseStatus.ValidationError)
+                return BadRequest(result.ValidationErrors);
+
+            return BadRequest(result.Message);
+        }
+
+        [Authorize(Roles = "admin,manager,employee")]
+        [HttpDelete("{vehicleId}")]
+        public async Task<ActionResult> DeleteVehicle([FromRoute] Guid vehicleId)
+        {
+            var result = await _mediator.Send(new DeleteVehicleCommand(vehicleId));
+
+            if (result.Success)
+                return NoContent();
 
             return BadRequest(result.Message);
         }

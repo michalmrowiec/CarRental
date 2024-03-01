@@ -15,11 +15,14 @@ namespace CarRental.Application.Functions.Vehicles.Queries.GetVehicleById
 
         public async Task<ResponseBase<Vehicle>> Handle(GetVehicleByIdQuery request, CancellationToken cancellationToken)
         {
-            var vehicle = await _vehicleRepository.GetByIdAsync(request.VehicleId);
-
-            if (vehicle == null)
+            Vehicle vehicle;
+            try
             {
-                return new ResponseBase<Vehicle>(false, "Vehicle does not exist.");
+                vehicle = await _vehicleRepository.GetByIdAsync(request.VehicleId);
+            }
+            catch (Exception)
+            {
+                return new ResponseBase<Vehicle>(false, "Vehicle does not exist.", ResponseBase.ResponseStatus.NotFound);
             }
 
             return new ResponseBase<Vehicle>(vehicle);

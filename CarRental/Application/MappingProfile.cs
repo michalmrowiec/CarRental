@@ -16,10 +16,6 @@ namespace CarRental.Application
             CreateMap<AddEmployeeCommand, Employee>();
 
             CreateMap<AddVehicleCommand, Vehicle>();
-
-            CreateMap<UpdateVehicleCommand, Vehicle>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore())
-                .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }
