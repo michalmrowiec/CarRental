@@ -1,4 +1,5 @@
 using CarRental;
+using CarRental.API.Services;
 using CarRental.Application.Contracts;
 using CarRental.Application.Contracts.Files;
 using CarRental.Domain.Entities;
@@ -22,6 +23,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+builder.Services.AddScoped<IUserContextService, UserContextService>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
@@ -63,6 +67,7 @@ builder.Services.AddScoped<ISieveProcessor, CarRentalSieveProcessor>();
 builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 builder.Services.AddScoped(typeof(IVehicleRepository), typeof(VehicleRepository));
 builder.Services.AddScoped(typeof(IFileRepository), typeof(ServerStaticFileRepository));
+builder.Services.AddScoped(typeof(IRentalRepository), typeof(RentalRepository));
 
 var app = builder.Build();
 
