@@ -104,14 +104,13 @@ namespace CarRental.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AcceptingEmployeeId")
+                    b.Property<Guid?>("AcceptingEmployeeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -133,7 +132,7 @@ namespace CarRental.Migrations
                     b.Property<bool>("IsVehicleReturned")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("NetAmount")
+                    b.Property<decimal>("NetAmountWithoutDiscount")
                         .HasPrecision(19, 4)
                         .HasColumnType("decimal(19,4)");
 
@@ -451,9 +450,7 @@ namespace CarRental.Migrations
                 {
                     b.HasOne("CarRental.Domain.Entities.Employee", "Employee")
                         .WithMany("AcceptedRentals")
-                        .HasForeignKey("AcceptingEmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AcceptingEmployeeId");
 
                     b.HasOne("CarRental.Domain.Entities.Customer", "Client")
                         .WithMany("Rentals")

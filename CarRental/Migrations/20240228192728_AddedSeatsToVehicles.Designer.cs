@@ -136,7 +136,7 @@ namespace CarRental.Migrations
                     b.Property<bool>("IsVehicleReturned")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("NetAmount")
+                    b.Property<decimal>("NetAmountWithoutDiscount")
                         .HasPrecision(19, 4)
                         .HasColumnType("decimal(19,4)");
 
