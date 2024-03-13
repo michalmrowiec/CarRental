@@ -1,6 +1,8 @@
 import { AboutUs } from "./components/AboutUs";
 import { Vehicles } from "./components/Vehicles";
 import { Home } from "./components/Home";
+import { Join } from "./components/Join";
+
 
 const AppRoutes = [
   {
@@ -14,6 +16,10 @@ const AppRoutes = [
   {
     path: '/vehicles',
     element: <Vehicles />
+  },
+  {
+    path: '/Join',
+    element: <Join />
   }
 ];
 

@@ -5,6 +5,7 @@ import './NavMenu.css';
 import carLogo from '../images/car_rental.svg';
 
 
+
 export class NavMenu extends Component {
   static displayName = NavMenu.name;
 
@@ -43,6 +44,9 @@ export class NavMenu extends Component {
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/vehicles">Vehicles</NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink tag={Link} className="text-dark" to="/Join">Join</NavLink>
               </NavItem>
             </ul>
           </Collapse>
