@@ -2,7 +2,7 @@ import { AboutUs } from "./components/AboutUs";
 import { Vehicles } from "./components/Vehicles";
 import { Home } from "./components/Home";
 import { Join } from "./components/Join";
-
+import { SignIn } from "./components/SignIn";
 
 const AppRoutes = [
   {
@@ -20,6 +20,10 @@ const AppRoutes = [
   {
     path: '/Join',
     element: <Join />
+  },
+  {
+    path: '/SignIn',
+    element: <SignIn />
   }
 ];
 

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export class Join extends Component {
     constructor(props) {
@@ -63,10 +67,19 @@ export class Join extends Component {
         if (!this.state.formSubmitted && !this.validateAge()) {
             return;
         }
-        
+
         try {
-            // Symulacja rejestracji
-            setTimeout(() => {
+            const response = await fetch('https://localhost:44403/api/v1/User/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(this.state)
+            });
+
+            if (response.ok) {
+                // Obsługa pozytywnej odpowiedzi API
+                console.log('Dane zostały pomyślnie wysłane do API');
                 // Resetowanie stanu formularza i wyświetlenie komunikatu
                 this.setState({
                     name: '',
@@ -89,11 +102,14 @@ export class Join extends Component {
                     registered: true
                 });
 
+                // Ukryj komunikat "zarejestrowano" po 3 sekundach
                 setTimeout(() => {
-                    // Ukryj komunikat "zarejestrowano" po 3 sekundach
                     this.setState({ registered: false });
                 }, 3000);
-            }, 1000); // Symulacja 1-sekundowego opóźnienia w rejestracji
+            } else {
+                // Obsługa błędu odpowiedzi API
+                console.error('Błąd podczas wysyłania danych do API');
+            }
         } catch (error) {
             // Obsługa błędu połączenia lub innych błędów
             console.error('Wystąpił błąd:', error);
