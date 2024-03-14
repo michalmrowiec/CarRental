@@ -119,37 +119,37 @@ export class Join extends Component {
 
     render() {
         return (
-            <div>
-                <h2>Registration</h2>
-                {this.state.ageError && <div style={{ color: 'red' }}>Musisz mieć co najmniej 18 lat, aby się zarejestrować.</div>}
-                {this.state.registered && <div style={{ color: 'green' }}>Zarejestrowano!</div>}
-                <form onSubmit={this.handleSubmit}>
-                    <div class="container text-center">
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Name</span>
+            <div className='d-flex justify-content-center align-items-center bg-light vh-100'>
+                <form onSubmit={this.handleSubmit} className='bg-white p-3 rounded w-25'>
+                    <div className="container text-center">
+                    <h2>Registration</h2>
+                    {this.state.registered && <div className="input-group-text flex-nowrap" style={{ color: 'green' }}>Zarejestrowano!</div>}
+                        <div className="input-group flex-nowrap">
+                            <span className="input-group-text" id="addon-wrapping">Name</span>
                             <input type="text" 
                                 value={this.state.name}
                                 onChange={this.handleInputChange}
                                 name="name"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Last name</span>
+                        <div className="input-group flex-nowrap">
+                            <span className="input-group-text" id="addon-wrapping">Last name</span>
                             <input type="text" 
                                 value={this.state.lastName}
                                 onChange={this.handleInputChange}
                                 name="lastName"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Birth date</span>
+                        <div className="input-group flex-nowrap">
+                            <span className="input-group-text" id="addon-wrapping">Birth date</span>
                             <input type="date" 
                                 value={this.state.dateOfBirth}
                                 onChange={this.handleInputChange}
                                 name="dateOfBirth"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
-                        <div class="input-group flex-nowrap w-25 dropend">
+                        {this.state.ageError && <div className="input-group flex-nowrap" style={{ color: 'red' }}>Musisz mieć co najmniej 18 lat, aby się zarejestrować.</div>}
+                        <div className="input-group dropend">
                             <button className="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {this.state.gender ? this.state.gender : 'Gender'}
                             </button>
@@ -159,94 +159,94 @@ export class Join extends Component {
                                 <li><button type="button" className="dropdown-item" onClick={() => this.handleGenderSelect('Skoryk')}>Skoryk</button></li>
                             </ul>
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">@</span>
+                        <div className="input-group flex-nowrap ">
+                            <span className="input-group-text" id="addon-wrapping">@</span>
                             <input type="email"
                                     name="emailAddress"
                                     value={this.state.emailAddress}
                                     onChange={this.handleInputChange} 
-                                    class="form-control"/>
+                                    className="form-control"/>
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Password</span>
+                        <div className="input-group flex-nowrap">
+                            <span className="input-group-text" id="addon-wrapping">Password</span>
                             <input type="password"
                                     name="password"
                                     value={this.state.password}
                                     onChange={this.handleInputChange} 
-                                    class="form-control"/>
+                                    className="form-control"/>
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Repeat password</span>
+                        <div className="input-group flex-nowrap">
+                            <span className="input-group-text" id="addon-wrapping">Repeat password</span>
                             <input type="password"
                                     name="repeatPassword"
                                     value={this.state.repeatPassword}
                                     onChange={this.handleInputChange} 
-                                    class="form-control"/>
+                                    className="form-control"/>
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Phone number</span>
+                        <div className="input-group flex-nowrap ">
+                            <span className="input-group-text" id="addon-wrapping">Phone number</span>
                             <input type="tel"
                                     name="phoneNumber"
                                     value={this.state.phoneNumber}
                                     onChange={this.handleInputChange} 
-                                    class="form-control"/>
+                                    className="form-control"/>
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Street</span>
+                        <div className="input-group flex-nowrap ">
+                            <span className="input-group-text" id="addon-wrapping">Street</span>
                             <input type="text" 
                                 value={this.state.street}
                                 onChange={this.handleInputChange}
                                 name="street"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">House number</span>
+                        <div className="input-group flex-nowrap ">
+                            <span className="input-group-text" id="addon-wrapping">House number</span>
                             <input type="text" 
                                 value={this.state.houseNumber}
                                 onChange={this.handleInputChange}
                                 name="houseNumber"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Apartment number</span>
+                        <div className="input-group flex-nowrap">
+                            <span className="input-group-text" id="addon-wrapping">Apartment number</span>
                             <input type="text" 
                                 value={this.state.apartmentNumber}
                                 onChange={this.handleInputChange}
                                 name="apartmentNumber"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
                         
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">City</span>
+                        <div className="input-group flex-nowrap ">
+                            <span className="input-group-text" id="addon-wrapping">City</span>
                             <input type="text" 
                                 value={this.state.city}
                                 onChange={this.handleInputChange}
                                 name="city"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">State</span>
+                        <div className="input-group flex-nowrap ">
+                            <span className="input-group-text" id="addon-wrapping">State</span>
                             <input type="text" 
                                 value={this.state.state}
                                 onChange={this.handleInputChange}
                                 name="state"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Country</span>
+                        <div className="input-group flex-nowrap ">
+                            <span className="input-group-text" id="addon-wrapping">Country</span>
                             <input type="text" 
                                 value={this.state.country}
                                 onChange={this.handleInputChange}
                                 name="country"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
-                        <div class="input-group flex-nowrap w-25">
-                            <span class="input-group-text" id="addon-wrapping">Postal code</span>
+                        <div className="input-group flex-nowrap ">
+                            <span className="input-group-text" id="addon-wrapping">Postal code</span>
                             <input type="text" 
                                 value={this.state.postalCode}
                                 onChange={this.handleInputChange}
                                 name="postalCode"
-                                class="form-control" />
+                                className="form-control" />
                         </div>
                     </div>    
                     <div>

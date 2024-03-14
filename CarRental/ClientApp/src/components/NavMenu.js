@@ -5,14 +5,13 @@ import './NavMenu.css';
 import carLogo from '../images/car_rental.svg';
 
 export class NavMenu extends Component {
-  static displayName = NavMenu.name;
-
   constructor(props) {
     super(props);
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
-      collapsed: true
+      collapsed: true,
+      isLoggedIn: localStorage.getItem('loggedInUser') !== null // Sprawdź, czy użytkownik jest zalogowany na podstawie localStorage
     };
   }
 
@@ -22,8 +21,22 @@ export class NavMenu extends Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const isLoggedIn = localStorage.getItem('loggedInUser') !== null;
+    if (prevState.isLoggedIn !== isLoggedIn) {
+      this.setState({ isLoggedIn });
+    }
+  }
+
+  handleLogout = () => {
+    // Usuń informacje o zalogowanym użytkowniku z localStorage
+    localStorage.removeItem('loggedInUser');
+    // Zaktualizuj stan isLoggedIn na false
+    this.setState({ isLoggedIn: false });
+  };
+
   render() {
-    const { loggedInUser } = this.props;
+    const { isLoggedIn } = this.state;
 
     return (
       <header>
@@ -44,17 +57,22 @@ export class NavMenu extends Component {
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/vehicles">Vehicles</NavLink>
               </NavItem>
-              {loggedInUser ? (
-                <NavItem>
-                  <span className="text-dark">{loggedInUser.name}</span>
-                </NavItem>
+              {isLoggedIn ? (
+                <>
+                  <NavItem>
+                    <span className="text-dark">{localStorage.getItem('loggedInUser')}</span>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink tag={Link} className="text-dark" to="/" onClick={this.handleLogout}>Log-Out</NavLink>
+                  </NavItem>
+                </>
               ) : (
                 <>
                   <NavItem>
                     <NavLink tag={Link} className="text-dark" to="/Join">Join</NavLink>
                   </NavItem>
                   <NavItem>
-                    <NavLink tag={Link} className="text-dark" to="/SignIn">SignIn</NavLink>
+                    <NavLink tag={Link} className="text-dark" to="/SignIn">Sign-In</NavLink>
                   </NavItem>
                 </>
               )}
