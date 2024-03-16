@@ -3,6 +3,7 @@ import { Vehicles } from "./components/Vehicles";
 import { Home } from "./components/Home";
 import { Join } from "./components/Join";
 import { SignIn } from "./components/SignIn";
+import { User } from "./components/User";
 
 const AppRoutes = [
   {
@@ -24,6 +25,10 @@ const AppRoutes = [
   {
     path: '/SignIn',
     element: <SignIn />
+  },
+  {
+    path: '/User',
+    element: <User />
   }
 ];
 
