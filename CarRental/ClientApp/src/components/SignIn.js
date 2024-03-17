@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// musiałem zmienic na komponent funkcyjny, a nie klasowy aby uzyc hooka do przenoszenia na strone startowa (patola)
+
 export function SignIn() {
     const [emailAddress, setEmailAddress] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(null); // Dodanie stanu do przechowywania błędu
     const navigate = useNavigate();
 
     const handleInputChange = event => {
@@ -19,30 +20,30 @@ export function SignIn() {
     const handleSubmit = async event => {
         event.preventDefault();
         try {
-          const response = await fetch('https://localhost:44403/api/v1/User/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              emailAddress: emailAddress,
-              password: password
-            })
-          });
-          if (response.ok) {
-            console.log('pomyslnie zalogowano');
-            localStorage.setItem('loggedInUser', emailAddress);
-            
-            navigate('/'); // Przekierowanie do strony głównej
-            window.location.reload();
-          } else {
-            console.log("Nieudane logowanie. Sprawdź dane logowania i spróbuj ponownie.");
-          }
-          
+            const response = await fetch('https://localhost:44403/api/v1/User/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    emailAddress: emailAddress,
+                    password: password
+                })
+            });
+            if (response.ok) {
+                console.log('pomyslnie zalogowano');
+                sessionStorage.setItem('loggedInUser', emailAddress);
+                navigate('/'); // Przekierowanie do strony głównej
+                window.location.reload();
+            } else if (response.status === 400) {
+                setError("Niepoprawne dane logowania. Sprawdź email i hasło."); // Ustawienie błędu dla niepoprawnych danych logowania
+            } else {
+                console.log("Nieudane logowanie. Sprawdź dane logowania i spróbuj ponownie.");
+            }
         } catch (error) {
-          console.error("Błąd podczas próby zalogowania:", error);
+            console.error("Błąd podczas próby zalogowania:", error);
         }
-      };      
+    };      
 
     return (
         <div className='d-flex justify-content-center align-items-center bg-light vh-100'>
@@ -64,6 +65,7 @@ export function SignIn() {
                             onChange={handleInputChange} 
                             className="form-control"/>
                 </div>
+                {error && <div className="alert alert-danger mt-2" role="alert">{error}</div>} {/* Wyświetlanie notyfikacji o błędzie */}
                 <div>
                     <button onClick={handleSubmit}>Zaloguj</button>
                 </div>
