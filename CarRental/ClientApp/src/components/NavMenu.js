@@ -43,7 +43,7 @@ export class NavMenu extends Component {
   
   handleLogout() {
     // Usuń informacje o zalogowanym użytkowniku z localStorage
-    sessionStorage.removeItem('loggedInUser');
+    localStorage.removeItem('loggedInUser');
     // Zaktualizuj stan isLoggedIn na false
     this.setState({ isLoggedIn: false });
   }

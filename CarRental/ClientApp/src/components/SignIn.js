@@ -32,7 +32,7 @@ export function SignIn() {
             });
             if (response.ok) {
                 console.log('pomyslnie zalogowano');
-                sessionStorage.setItem('loggedInUser', emailAddress);
+                localStorage.setItem('loggedInUser', emailAddress);
                 navigate('/'); // Przekierowanie do strony głównej
                 window.location.reload();
             } else if (response.status === 400) {
