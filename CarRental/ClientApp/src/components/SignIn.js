@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {useSignIn} from 'react-auth-kit';
 
 
 export function SignIn() {
@@ -17,6 +18,9 @@ export function SignIn() {
         }
     };
 
+    const signIn = useSignIn();
+
+
     const handleSubmit = async event => {
         event.preventDefault();
         try {
@@ -31,8 +35,17 @@ export function SignIn() {
                 })
             });
             if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                signIn({
+                    token: data.JwtToken,
+                    expiresIn: 3600, //czas wygaśnięcia tokenu
+                    tokenType: "Bearer",
+                    authState: {}, //dodatkowy stan auth
+                });
+                sessionStorage.setItem('userRole', data.role);
                 console.log('pomyslnie zalogowano');
-                localStorage.setItem('loggedInUser', emailAddress);
+                // console.log(data.JwtToken);
                 navigate('/'); // Przekierowanie do strony głównej
                 window.location.reload();
             } else if (response.status === 400) {
@@ -43,7 +56,7 @@ export function SignIn() {
         } catch (error) {
             console.error("Błąd podczas próby zalogowania:", error);
         }
-    };      
+    };    
 
     return (
         <div className='d-flex justify-content-center align-items-center bg-light vh-100'>

@@ -7,6 +7,9 @@ import './NavMenu.css';
 import carLogo from '../images/car_rental.svg';
 import userLogo from '../images/user.svg';
 
+// import { AuthContext } from './AuthContext';
+
+
 export class NavMenu extends Component {
   constructor(props) {
     super(props);
@@ -16,8 +19,9 @@ export class NavMenu extends Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.state = {
       dropdownOpen: false,
-      isLoggedIn: localStorage.getItem('loggedInUser') !== null,
+      isLoggedIn: sessionStorage.getItem('userRole') !== null,
       collapsed: true,
+      role : sessionStorage.getItem('userRole')
     };
   }
   
@@ -29,11 +33,15 @@ export class NavMenu extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const isLoggedIn = localStorage.getItem('loggedInUser') !== null;
+    const isLoggedIn = sessionStorage.getItem('userRole') !== null;
+    console.log(prevState.isLoggedIn);
     if (prevState.isLoggedIn !== isLoggedIn) {
       this.setState({ isLoggedIn });
+      // window.location.reload();
     }
   }
+
+ 
 
   toggleDropdown() {
     this.setState(prevState => ({
@@ -43,14 +51,18 @@ export class NavMenu extends Component {
   
   handleLogout() {
     // Usuń informacje o zalogowanym użytkowniku z localStorage
-    localStorage.removeItem('loggedInUser');
-    // Zaktualizuj stan isLoggedIn na false
-    this.setState({ isLoggedIn: false });
+    sessionStorage.removeItem('userRole');
+      // window.location.reload();
+
   }
 
   render() {
-    const { isLoggedIn } = this.state;
-
+    
+    // const role = sessionStorage.getItem('userRole'); // Pobierz rolę z localStorage
+    // console.log(role);
+                
+    // console.log(this.state.role);
+    // console.log(this.state.isLoggedIn);
     return (
       <header>
         <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
@@ -70,7 +82,9 @@ export class NavMenu extends Component {
               <NavItem>
                 <NavLink tag={Link} className="text-dark text-decoration" to="/vehicles">Vehicles</NavLink>
               </NavItem>
-              {isLoggedIn ? (
+              
+              
+              {this.state.role === 'customer' && this.state.isLoggedIn ?(
                 <>
                 <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
                 <DropdownToggle caret className="btn btn-light d-flex align-items-center">
