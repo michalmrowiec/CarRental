@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRental.Migrations
 {
     [DbContext(typeof(CarRentalContext))]
-    [Migration("20231124122132_Init")]
-    partial class Init
+    [Migration("20240228192728_AddedSeatsToVehicles")]
+    partial class AddedSeatsToVehicles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace CarRental.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CarRental.Entities.Insurance", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Insurance", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,7 +101,7 @@ namespace CarRental.Migrations
                     b.ToTable("Insurances");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Rental", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Rental", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -172,7 +172,7 @@ namespace CarRental.Migrations
                     b.ToTable("Rentals");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.User", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -259,7 +259,7 @@ namespace CarRental.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Vehicle", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Vehicle", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -302,6 +302,9 @@ namespace CarRental.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrls")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("bit");
 
@@ -325,6 +328,9 @@ namespace CarRental.Migrations
                     b.Property<decimal>("RentalNetPricePerDay")
                         .HasPrecision(19, 4)
                         .HasColumnType("decimal(19,4)");
+
+                    b.Property<int>("Seats")
+                        .HasColumnType("int");
 
                     b.Property<int>("Torqe")
                         .HasColumnType("int");
@@ -351,7 +357,7 @@ namespace CarRental.Migrations
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.VehicleService", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.VehicleService", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -408,29 +414,32 @@ namespace CarRental.Migrations
                     b.ToTable("VehicleServices");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Customer", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Customer", b =>
                 {
-                    b.HasBaseType("CarRental.Entities.User");
+                    b.HasBaseType("CarRental.Domain.Entities.User");
 
                     b.HasDiscriminator().HasValue("Customer");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Employee", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Employee", b =>
                 {
-                    b.HasBaseType("CarRental.Entities.User");
+                    b.HasBaseType("CarRental.Domain.Entities.User");
+
+                    b.Property<bool>("PasswordChangeRequired")
+                        .HasColumnType("bit");
 
                     b.HasDiscriminator().HasValue("Employee");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Insurance", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Insurance", b =>
                 {
-                    b.HasOne("CarRental.Entities.Employee", "Employee")
+                    b.HasOne("CarRental.Domain.Entities.Employee", "Employee")
                         .WithMany("CreatedInsurances")
                         .HasForeignKey("CreatedByEmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRental.Entities.Vehicle", "Vehicle")
+                    b.HasOne("CarRental.Domain.Entities.Vehicle", "Vehicle")
                         .WithMany("Insurances")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -441,42 +450,42 @@ namespace CarRental.Migrations
                     b.Navigation("Vehicle");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Rental", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Rental", b =>
                 {
-                    b.HasOne("CarRental.Entities.Employee", "Employee")
+                    b.HasOne("CarRental.Domain.Entities.Employee", "Employee")
                         .WithMany("AcceptedRentals")
                         .HasForeignKey("AcceptingEmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRental.Entities.Customer", "Customer")
+                    b.HasOne("CarRental.Domain.Entities.Customer", "Client")
                         .WithMany("Rentals")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("CarRental.Entities.Vehicle", "Vehicle")
+                    b.HasOne("CarRental.Domain.Entities.Vehicle", "Vehicle")
                         .WithMany("Rentals")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("Client");
 
                     b.Navigation("Employee");
 
                     b.Navigation("Vehicle");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.VehicleService", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.VehicleService", b =>
                 {
-                    b.HasOne("CarRental.Entities.Employee", "Employee")
+                    b.HasOne("CarRental.Domain.Entities.Employee", "Employee")
                         .WithMany("CreatedVehicleServices")
                         .HasForeignKey("CreatedByEmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRental.Entities.Vehicle", "Vehicle")
+                    b.HasOne("CarRental.Domain.Entities.Vehicle", "Vehicle")
                         .WithMany("VehicleServices")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -487,7 +496,7 @@ namespace CarRental.Migrations
                     b.Navigation("Vehicle");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Vehicle", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Vehicle", b =>
                 {
                     b.Navigation("Insurances");
 
@@ -496,12 +505,12 @@ namespace CarRental.Migrations
                     b.Navigation("VehicleServices");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Customer", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Customer", b =>
                 {
                     b.Navigation("Rentals");
                 });
 
-            modelBuilder.Entity("CarRental.Entities.Employee", b =>
+            modelBuilder.Entity("CarRental.Domain.Entities.Employee", b =>
                 {
                     b.Navigation("AcceptedRentals");
 

@@ -1,10 +1,17 @@
 using CarRental;
-using CarRental.Entities;
+using CarRental.Application.Contracts;
+using CarRental.Application.Contracts.Files;
+using CarRental.Domain.Entities;
 using CarRental.Infrastructure;
-using Microsoft.AspNetCore.Http.Json;
+using CarRental.Infrastructure.Ropositories;
+using CarRental.Infrastructure.Ropositories.Files;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Sieve.Services;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -12,7 +19,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Program>());
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllersWithViews().AddJsonOptions(options =>
 {
@@ -41,12 +50,19 @@ builder.Services.AddAuthentication(option =>
 });
 
 builder.Services.AddSingleton(authenticationSettings);
+
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDbContext<CarRentalContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb"));
 });
+
+builder.Services.AddScoped<ISieveProcessor, CarRentalSieveProcessor>();
+
+builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+builder.Services.AddScoped(typeof(IVehicleRepository), typeof(VehicleRepository));
+builder.Services.AddScoped(typeof(IFileRepository), typeof(ServerStaticFileRepository));
 
 var app = builder.Build();
 
@@ -59,13 +75,19 @@ if (pendingMigrations.Any())
     dbContext.Database.Migrate();
 }
 
+if (!dbContext.Employees.Any(e => e.Role == "admin"))
+{
+    var csr = new CreateStartAdmin(scope.ServiceProvider.GetRequiredService<IMediator>());
+    await csr.Create();
+}
+
 // Insert test data to db
-if (!dbContext.Vehicles.Any() && !dbContext.Insurances.Any() && !dbContext.Employees.Any() && !dbContext.Clients.Any() && !dbContext.Rentals.Any() && !dbContext.VehicleServices.Any())
+if (!dbContext.Vehicles.Any() && !dbContext.Insurances.Any() && !dbContext.Employees.Any() && !dbContext.Customers.Any() && !dbContext.Rentals.Any() && !dbContext.VehicleServices.Any())
 {
     dbContext.Vehicles.AddRange(TestDataSeeder.GetTestVehiclesData());
     dbContext.Insurances.AddRange(TestDataSeeder.GetTestInsurancesData());
     dbContext.Employees.AddRange(TestDataSeeder.GetTestEmployeesData());
-    dbContext.Clients.AddRange(TestDataSeeder.GetTestClientsData());
+    dbContext.Customers.AddRange(TestDataSeeder.GetTestClientsData());
     dbContext.Rentals.AddRange(TestDataSeeder.GetTestRentalsData());
     dbContext.VehicleServices.AddRange(TestDataSeeder.GetTestVehicleServicesData());
     dbContext.SaveChanges();
@@ -84,7 +106,12 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarRentalAP
 app.UseAuthentication();
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "src", "images")),
+    RequestPath = "/images"
+});
 app.UseRouting();
 
 app.UseAuthorization();

@@ -1,4 +1,4 @@
-﻿namespace CarRental.Entities
+﻿namespace CarRental.Domain.Entities
 {
     public class VehicleService
     {
@@ -13,10 +13,10 @@
         public string Currency { get; set; }
         public decimal VatRate { get; set; }
         public decimal TotalGrossCost { get; set; }
-        public Guid VehicleId { get; set;}
+        public Guid VehicleId { get; set; }
         public Guid CreatedByEmployeeId { get; set; }
 
         public Vehicle? Vehicle { get; set; }
-        public Employee? Employee {  get; set; }
+        public Employee? Employee { get; set; }
     }
 }
