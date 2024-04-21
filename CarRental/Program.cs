@@ -80,6 +80,7 @@ if (!dbContext.Employees.Any(e => e.Role == "admin"))
     var csr = new CreateStartAdmin(scope.ServiceProvider.GetRequiredService<IMediator>());
     await csr.Create();
 }
+dbContext.Vehicles.AddRange(TestDataSeeder.GetTestVehiclesData());
 
 // Insert test data to db
 if (!dbContext.Vehicles.Any() && !dbContext.Insurances.Any() && !dbContext.Employees.Any() && !dbContext.Customers.Any() && !dbContext.Rentals.Any() && !dbContext.VehicleServices.Any())
