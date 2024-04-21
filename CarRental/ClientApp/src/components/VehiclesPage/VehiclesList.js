@@ -54,12 +54,11 @@ export class VehiclesList extends Component {
 
             const vehicles = data.items.map(item => ({
                 name: item.brand + ' ' + item.model,
-                image: item.imageUrls,
+                image: item.imageUrls.slice(0,-1),
                 description: item.carEquipment,
                 price: item.rentalNetPricePerDay + item.currency
             }));
             console.log(vehicles);
-            // Aktualizacja stanu komponentu
             this.setState({ vehicles });
         }
     }
