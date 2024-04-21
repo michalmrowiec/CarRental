@@ -156,7 +156,6 @@ export class Join extends Component {
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li><button type="button" className="dropdown-item" onClick={() => this.handleGenderSelect('Male')}>Male</button></li>
                                 <li><button type="button" className="dropdown-item" onClick={() => this.handleGenderSelect('Female')}>Female</button></li>
-                                <li><button type="button" className="dropdown-item" onClick={() => this.handleGenderSelect('Skoryk')}>Skoryk</button></li>
                             </ul>
                         </div>
                         <div className="input-group flex-nowrap ">
