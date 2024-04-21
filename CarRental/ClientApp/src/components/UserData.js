@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import './UserData.css';
+import '../styles/UserData.css';
 
 
 export class UserData extends Component {

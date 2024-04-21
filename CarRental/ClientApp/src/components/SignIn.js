@@ -43,6 +43,7 @@ export function SignIn() {
                     tokenType: "Bearer",
                     authState: {}, //dodatkowy stan auth
                 });
+                
                 sessionStorage.setItem('userRole', data.role);
                 console.log('pomyslnie zalogowano');
                 // console.log(data.JwtToken);
