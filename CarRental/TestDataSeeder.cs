@@ -35,6 +35,7 @@ namespace CarRental
                     RentalNetPricePerDay = 100,
                     Currency = "PLN",
                     VatRate = 0.23m,
+                    ImageUrls = "images\\VehicleImage\\sample_car.jpeg;"
                 },
 
                 new Vehicle
@@ -63,6 +64,7 @@ namespace CarRental
                     RentalNetPricePerDay = 150,
                     Currency = "PLN",
                     VatRate = 0.23m,
+                    ImageUrls = "images\\VehicleImage\\sample_car.jpeg;"
                 },
 
                 new Vehicle
@@ -91,6 +93,7 @@ namespace CarRental
                     RentalNetPricePerDay = 200,
                     Currency = "PLN",
                     VatRate = 0.23m,
+                    ImageUrls = "images\\VehicleImage\\sample_car.jpeg;"
                 }
             };
         }
