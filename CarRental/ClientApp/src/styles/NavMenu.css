@@ -18,10 +18,11 @@ html {
 }
 
 .user-logo {
-  max-width: 30px; /* Dostosuj maksymalną szerokość do potrzeb */
-  height: auto; /* Dzięki temu obrazek zachowa proporcje */
+  max-width: 30px; 
+  height: auto; 
 }
 
 .text-decoration:hover {
   text-decoration: underline;
 }
+

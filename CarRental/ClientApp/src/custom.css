@@ -17,3 +17,7 @@ code {
   border-color: #1861ac;
 }
 
+.divv {
+  height: calc(100vh - 150px);
+
+}

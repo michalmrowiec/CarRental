@@ -3,7 +3,7 @@ import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from '
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import { Link } from 'react-router-dom';
-import './NavMenu.css';
+import '../styles/NavMenu.css';
 import carLogo from '../images/car_rental.svg';
 import userLogo from '../images/user.svg';
 
