@@ -20,6 +20,9 @@ export class VehiclesList extends Component {
     }
 
     async giveVehicles(page, pageSize) {
+        if (pageSize === undefined)
+            pageSize = this.state.pageSize;
+
         const response = await fetch('https://localhost:44403/api/v1/Vehicle/get-filtered', {
             method: 'POST',
             headers: {
@@ -41,7 +44,7 @@ export class VehiclesList extends Component {
 
             const vehicles = data.items.map(item => ({
                 name: item.brand + ' ' + item.model,
-                image: item.imageUrls.slice(0, -1),
+                image: 'images/VehicleImage/sample_car.jpeg',//item.imageUrls.slice(0, -1),
                 description: item.carEquipment,
                 price: item.rentalNetPricePerDay + item.currency
             }));
@@ -100,7 +103,7 @@ export class VehiclesList extends Component {
                     </Pagination>
 
                     <div className="ms-2 d-flex">
-                        <select className="form-select form-select-sm" style={{ width: 'auto', marginBottom: '1rem' }} onChange={(e) => this.giveVehicles(currentPage, e.target.value)}>
+                        <select className="form-select form-select-sm" style={{ width: 'auto', marginBottom: '1rem' }} onChange={(e) => this.giveVehicles(1, e.target.value)}>
                             <option value={2} selected={pageSize === 2}>2</option>
                             <option value={10} selected={pageSize === 10}>10</option>
                             <option value={20} selected={pageSize === 20}>20</option>
