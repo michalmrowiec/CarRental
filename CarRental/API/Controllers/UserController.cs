@@ -38,6 +38,8 @@ namespace CarRental.API.Controllers
             var result = await _mediator.Send(loginCommand);
 
             if (result.Success)
+                Response.Cookies.Append("jwt", result.JwtToken.Token, new CookieOptions { HttpOnly = true });
+
                 return Ok(result.JwtToken);
 
             return BadRequest(result.ValidationErrors);
