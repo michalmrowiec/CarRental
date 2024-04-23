@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form,Label, Input,FormGroup,Button } from 'reactstrap';
+import { Form,Label, Input,FormGroup,Button,FormFeedback } from 'reactstrap';
 
 export class Join extends Component {
     constructor(props) {
@@ -24,6 +24,7 @@ export class Join extends Component {
             state: '',
             country: '',
             postalCode: '',
+            emailError: null,
             ageError: false,
             formSubmitted: false,
             registered: false
@@ -85,6 +86,16 @@ export class Join extends Component {
                     this.setState({ registered: false });
                 }, 3000);
             } else {
+                const errorData = await response.json();
+
+                if (errorData.includes('Email Address must be email address')) {
+                    this.setState({emailError : 1});
+                } else if (errorData.includes('Email is taken')) {
+                    this.setState({emailError : 2});
+                } 
+                else {
+                    console.error('Nieznany błąd:', errorData);
+                }
                 // Obsługa błędu odpowiedzi API
                 console.error('Błąd podczas wysyłania danych do API');
             }
@@ -99,6 +110,7 @@ export class Join extends Component {
       };
 
     render() {
+        console.log('email status ' + this.state.emailError);
         return (
             <div className='divv d-flex justify-content-center align-items-center bg-light  '>
             
@@ -115,7 +127,20 @@ export class Join extends Component {
                 type="email"
                 onChange={this.handleInputChange}
                 value={this.state.emailAddress}
+                invalid={this.state.emailError ? true : false}
+                
                 />
+                <FormFeedback >
+                {
+                    (() => {
+                    if (this.state.emailError === 1) {
+                        return 'Email Address must be email address';
+                    } else if (this.state.emailError === 2) {
+                        return 'Email is taken';
+                    }
+                    })()
+                }
+                </FormFeedback>
             </FormGroup>
             <FormGroup>
                 <Label for="dateOfBirth">
