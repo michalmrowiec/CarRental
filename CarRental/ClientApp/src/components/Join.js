@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form,Label, Input,FormGroup,Button,FormFeedback } from 'reactstrap';
+import { Form,Label, Input,FormGroup,Button,FormFeedback,Alert } from 'reactstrap';
 
 export class Join extends Component {
     constructor(props) {
@@ -26,7 +26,7 @@ export class Join extends Component {
             postalCode: '',
             emailError: null,
             ageError: false,
-            formSubmitted: false,
+            passwordError: false,
             registered: false
           };
           this.state = this.initialState;
@@ -42,33 +42,9 @@ export class Join extends Component {
         });
     };
 
-    handleGenderSelect = gender => {
-        this.setState({ gender });
-    };
-
-    validateAge = () => {
-        const dob = new Date(this.state.dateOfBirth);
-        const today = new Date();
-        let age = today.getFullYear() - dob.getFullYear();
-        const month = today.getMonth() - dob.getMonth();
-        if (month < 0 || (month === 0 && today.getDate() < dob.getDate())) {
-            age--;
-        }
-        if (age < 18) {
-            this.setState({ ageError: true });
-            return false;
-        }
-        return true;
-    };
-
     handleSubmit = async event => {
         event.preventDefault();
         console.log("Form submitted!");
-
-        // Walidacja wieku tylko po naciśnięciu przycisku "Zarejestruj" i jeśli formularz nie został jeszcze złożony
-        if (!this.state.formSubmitted && !this.validateAge()) {
-            return;
-        }
 
         try {
             const response = await fetch('https://localhost:44403/api/v1/User/register', {
@@ -81,6 +57,7 @@ export class Join extends Component {
 
             if (response.ok) {
                 this.resetState();
+                this.setState({ registered: true });
                 // Ukryj komunikat "zarejestrowano" po 3 sekundach
                 setTimeout(() => {
                     this.setState({ registered: false });
@@ -88,14 +65,24 @@ export class Join extends Component {
             } else {
                 const errorData = await response.json();
 
+                this.resetErrors();
+
                 if (errorData.includes('Email Address must be email address')) {
                     this.setState({emailError : 1});
-                } else if (errorData.includes('Email is taken')) {
-                    this.setState({emailError : 2});
-                } 
-                else {
-                    console.error('Nieznany błąd:', errorData);
                 }
+
+                if (errorData.includes('Email is taken')) {
+                    this.setState({emailError : 2});
+                }
+
+                if (errorData.includes('You must be at least 18 years old.')) {
+                    this.setState({ageError : true});
+                }
+
+                if (errorData.includes('Passwords are not the same')) {
+                    this.setState({passwordError : true});
+                }
+                
                 // Obsługa błędu odpowiedzi API
                 console.error('Błąd podczas wysyłania danych do API');
             }
@@ -108,9 +95,15 @@ export class Join extends Component {
     resetState = () => {
         this.setState(this.initialState);
       };
+    
+    resetErrors = () => {
+        this.setState({emailError: null,
+                       ageError: false,
+                       passwordError: false,});
+    };
 
     render() {
-        console.log('email status ' + this.state.emailError);
+        console.log('registrated? ' + this.state.registered);
         return (
             <div className='divv d-flex justify-content-center align-items-center bg-light  '>
             
@@ -153,7 +146,11 @@ export class Join extends Component {
                 type="date"
                 onChange={this.handleInputChange}
                 value={this.state.dateOfBirth}
+                invalid={this.state.ageError}
                 />
+                <FormFeedback>
+                You must be at least 18 years old.
+                </FormFeedback>
             </FormGroup>
             <FormGroup>
                 <Label for="password">
@@ -179,8 +176,18 @@ export class Join extends Component {
                 type="password"
                 onChange={this.handleInputChange}
                 value={this.state.repeatPassword}
+                invalid={this.state.passwordError}
                 />
+                <FormFeedback>
+                Passwords are not the same
+                </FormFeedback>
+                
             </FormGroup>
+            {this.state.registered && 
+                <Alert color="success">
+                    Successfully rgistrated!
+                </Alert>
+            }
             <Button onClick={this.handleSubmit}>
                 Submit
             </Button>
