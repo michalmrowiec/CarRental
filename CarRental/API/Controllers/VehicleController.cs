@@ -26,9 +26,9 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost("get-filtered")]
-        public async Task<ActionResult<PagedResult<Vehicle>>> GetSortedAndFilteredVehicles([FromBody] SieveModel sieveModel)
+        public async Task<ActionResult<PagedResult<Vehicle>>> GetSortedAndFilteredVehicles([FromBody] GetSortedAndFilteredVehiclesQuery query)
         {
-            var result = await _mediator.Send(new GetSortedAndFilteredVehiclesQuery(sieveModel));
+            var result = await _mediator.Send(query);
 
             if (result.Success)
                 return Ok(result.ReturnedObj);
