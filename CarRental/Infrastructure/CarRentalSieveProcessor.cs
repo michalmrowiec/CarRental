@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Options;
 using Sieve.Models;
 using Sieve.Services;
-using System.Xml.Linq;
 
 namespace CarRental.Infrastructure
 {

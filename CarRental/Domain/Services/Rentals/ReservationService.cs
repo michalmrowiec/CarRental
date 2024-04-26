@@ -19,17 +19,24 @@ namespace CarRental.Domain.Services.Rentals
         /// <returns>Returns true if all days in the desired date range are available for reservation, false otherwise.</returns>
         public bool CheckReservationAvailability(DateTime startDate, DateTime endDate)
         {
-            var result = GetAllReservedDays().Intersect(ListDaysBetweenDates(startDate, endDate));
+            var result = GetAllReservedDays(_rentals).Intersect(ListDaysBetweenDates(startDate.Date, endDate.Date));
+            return !result.Any();
+        }
+        public bool CheckReservationAvailability(Guid vehicleId, DateTime startDate, DateTime endDate)
+        {
+            var allReservations = GetAllReservedDays(_rentals.Where(r => r.VehicleId.Equals(vehicleId)).ToList()).Select(d => d.Date);
+            var newReservationDates = ListDaysBetweenDates(startDate.Date, endDate.Date).Select(d => d.Date);
+            var result = allReservations.Intersect(newReservationDates).ToList();
             return !result.Any();
         }
 
-        public List<DateTime> GetAllReservedDays()
+        public List<DateTime> GetAllReservedDays(IList<Rental> rentals)
         {
             var allReservedDays = new List<DateTime>();
 
-            foreach (var rental in _rentals)
+            foreach (var rental in rentals)
             {
-                var reservedDays = ListDaysBetweenDates(rental.StartDate, rental.EndDate);
+                var reservedDays = ListDaysBetweenDates(rental.StartDate.Date, rental.EndDate.Date);
                 allReservedDays.AddRange(reservedDays);
             }
 
@@ -43,7 +50,7 @@ namespace CarRental.Domain.Services.Rentals
 
             for (int i = 0; i <= totalDays; i++)
             {
-                reservedDays.Add(startDate.AddDays(i));
+                reservedDays.Add(startDate.AddDays(i).Date);
             }
 
             return reservedDays;
