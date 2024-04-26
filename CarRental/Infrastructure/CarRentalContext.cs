@@ -33,7 +33,7 @@ namespace CarRental.Infrastructure
                 .WithMany(v => v.Rentals)
                 .HasForeignKey(r => r.VehicleId);
 
-                eb.Property(r => r.NetAmount)
+                eb.Property(r => r.NetAmountWithoutDiscount)
                 .HasPrecision(19, 4);
 
                 eb.Property(r => r.VatRate)

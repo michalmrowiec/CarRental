@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using CarRental.Application.Functions.Rentals.Commands.AddReservation;
+using CarRental.Application.Functions.Rentals.Dtos;
 using CarRental.Application.Functions.Users.Commands.AddEmployee;
 using CarRental.Application.Functions.Users.Commands.Register;
 using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
-using CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle;
 using CarRental.Domain.Entities;
 
 namespace CarRental.Application
@@ -16,6 +17,10 @@ namespace CarRental.Application
             CreateMap<AddEmployeeCommand, Employee>();
 
             CreateMap<AddVehicleCommand, Vehicle>();
+
+            CreateMap<AddReservationCommand, Rental>();
+
+            CreateMap<Rental, ReservationDto>();
         }
     }
 }

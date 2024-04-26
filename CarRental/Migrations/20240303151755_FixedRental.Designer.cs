@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRental.Migrations
 {
     [DbContext(typeof(CarRentalContext))]
-    [Migration("20240227092235_ModifyNamesAndAddProperties")]
-    partial class ModifyNamesAndAddProperties
+    [Migration("20240303151755_FixedRental")]
+    partial class FixedRental
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,14 +107,13 @@ namespace CarRental.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AcceptingEmployeeId")
+                    b.Property<Guid?>("AcceptingEmployeeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comments")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -329,6 +328,9 @@ namespace CarRental.Migrations
                         .HasPrecision(19, 4)
                         .HasColumnType("decimal(19,4)");
 
+                    b.Property<int>("Seats")
+                        .HasColumnType("int");
+
                     b.Property<int>("Torqe")
                         .HasColumnType("int");
 
@@ -451,9 +453,7 @@ namespace CarRental.Migrations
                 {
                     b.HasOne("CarRental.Domain.Entities.Employee", "Employee")
                         .WithMany("AcceptedRentals")
-                        .HasForeignKey("AcceptingEmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AcceptingEmployeeId");
 
                     b.HasOne("CarRental.Domain.Entities.Customer", "Client")
                         .WithMany("Rentals")
