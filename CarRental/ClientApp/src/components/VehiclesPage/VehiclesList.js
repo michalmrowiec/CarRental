@@ -11,17 +11,24 @@ export class VehiclesList extends Component {
             pageSize: 10,
             page: 1,
             currentPage: 0,
-            totalItems: 0
+            totalItems: 0,
+            from: null,
+            to: null
         };
     }
 
     componentDidMount() {
-        this.giveVehicles(this.state.page, this.state.pageSize);
+        this.giveVehicles(this.state.page, this.state.pageSize, null, null);
     }
 
-    async giveVehicles(page, pageSize) {
+    async giveVehicles(page, pageSize, fromDate, toDate) {
         if (pageSize === undefined)
             pageSize = this.state.pageSize;
+
+        if (fromDate > toDate) {
+            fromDate = null;
+            toDate = null;
+        }
 
         const response = await fetch('https://localhost:44403/api/v1/Vehicle/get-filtered', {
             method: 'POST',
@@ -32,7 +39,9 @@ export class VehiclesList extends Component {
                 filters: '',
                 sorts: '',
                 page: page,
-                pageSize: pageSize
+                pageSize: pageSize,
+                from: fromDate,
+                to: toDate
             })
         });
 
@@ -44,7 +53,7 @@ export class VehiclesList extends Component {
 
             const vehicles = data.items.map(item => ({
                 name: item.brand + ' ' + item.model,
-                image: 'images/VehicleImage/sample_car.jpeg',//item.imageUrls.slice(0, -1),
+                image: 'images/VehicleImage/sample_car.jpeg',
                 description: item.carEquipment,
                 price: item.rentalNetPricePerDay + item.currency
             }));
@@ -63,6 +72,19 @@ export class VehiclesList extends Component {
         const { vehicles, pageSize, currentPage, totalPages } = this.state;
         return (
             <div className="container">
+
+                <div>
+                    <label>From: </label>
+                    <input type="date" onChange={(e) => this.setState({ from: e.target.value })} />
+                    <label>To: </label>
+                    <input type="date" onChange={(e) => this.setState({ to: e.target.value })} />
+                    <button onClick={() => this.giveVehicles(1, this.state.pageSize, this.state.from, this.state.to)}>Search</button>
+
+                    <button onClick={() => {
+                        this.giveVehicles(1, this.state.pageSize)
+                    }}>All</button>
+                </div>
+
                 {vehicles.map((vehicle, index) => (
                     <VehicleCard key={index} vehicle={vehicle} />
                 ))}

@@ -7,7 +7,7 @@ namespace CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredV
 {
     public class GetSortedAndFilteredVehiclesQuery : SieveModel, IRequest<ResponseBase<PagedResult<Vehicle>>>
     {
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
     }
 }

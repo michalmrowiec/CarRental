@@ -27,7 +27,14 @@ namespace CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredV
 
             try
             {
-                result = await _vehicleRepository.GetSortedAndFilteredProductsAsync((SieveModel)request, request.From, request.To);
+                if(request.From.HasValue && request.To.HasValue)
+                {
+                    result = await _vehicleRepository.GetSortedAndFilteredProductsAsync((SieveModel)request, (DateTime)request.From, (DateTime)request.To);
+                }
+                else
+                {
+                    result = await _vehicleRepository.GetSortedAndFilteredProductsAsync((SieveModel)request);
+                }
             }
             catch (Exception)
             {
