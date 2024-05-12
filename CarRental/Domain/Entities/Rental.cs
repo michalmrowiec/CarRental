@@ -19,6 +19,8 @@
         public bool IsPaid { get; set; }
         public string PaymentMethod { get; set; }
         public string? Comments { get; set; }
+        public bool IsConfirmedByEmployee { get; set; }
+        public bool IsCanceled { get; set; }
 
         public Customer? Client { get; set; }
         public Employee? Employee { get; set; }

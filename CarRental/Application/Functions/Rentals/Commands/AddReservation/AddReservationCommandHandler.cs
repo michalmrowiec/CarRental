@@ -44,6 +44,8 @@ namespace CarRental.Application.Functions.Rentals.Commands.AddReservation
             mappedRental.CreatedAt = DateTime.UtcNow;
             mappedRental.UpdatedAt = DateTime.UtcNow;
             mappedRental.Comments = string.Empty;
+            mappedRental.IsCanceled = false;
+            mappedRental.IsConfirmedByEmployee = false;
 
             var days = request.EndDate.Subtract(request.StartDate).Days;
 
@@ -62,7 +64,6 @@ namespace CarRental.Application.Functions.Rentals.Commands.AddReservation
             catch (Exception ex)
             {
                 return new ResponseBase<ReservationDto>(false, "Something went wrong.\n" + ex.Message, ResponseBase.ResponseStatus.Error);
-                return new ResponseBase<ReservationDto>(false, "Something went wrong.", ResponseBase.ResponseStatus.Error);
             }
 
             var mappedRentalDto = _mapper.Map<ReservationDto>(addedRental);
