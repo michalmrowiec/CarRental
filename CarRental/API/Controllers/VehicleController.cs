@@ -3,12 +3,12 @@ using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
 using CarRental.Application.Functions.Vehicles.Commands.DeleteVehicle;
 using CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle;
 using CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredVehicles;
+using CarRental.Application.Functions.Vehicles.Queries.VehicleSortFilterOptions;
 using CarRental.Domain.Entities;
 using CarRental.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Sieve.Models;
 
 namespace CarRental.API.Controllers
 {
@@ -26,9 +26,9 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost("get-filtered")]
-        public async Task<ActionResult<PagedResult<Vehicle>>> GetSortedAndFilteredVehicles([FromBody] SieveModel sieveModel)
+        public async Task<ActionResult<PagedResult<Vehicle>>> GetSortedAndFilteredVehicles([FromBody] GetSortedAndFilteredVehiclesQuery query)
         {
-            var result = await _mediator.Send(new GetSortedAndFilteredVehiclesQuery(sieveModel));
+            var result = await _mediator.Send(query);
 
             if (result.Success)
                 return Ok(result.ReturnedObj);
@@ -37,17 +37,20 @@ namespace CarRental.API.Controllers
         }
 
         [HttpOptions("get-filtered")]
-        public ActionResult<string> OptionsOfGetSortedAndFilteredVehicles()
+        public async Task<ActionResult<object>> OptionsOfGetSortedAndFilteredVehicles()
         {
+            var result = await _mediator.Send(new VehicleSortFilterOptionsQuery());
+
             var options =
-                @"?sorts=     LikeCount,CommentCount,-created         // sort by likes, then comments, then descendingly by date created 
+                @"?sorts=     LikeCount,CommentCount,-created         // sort by likes, then comments, then descendingly by date created \n
 &filters=   LikeCount>10, Title@=awesome title,     // filter to posts with more than 10 likes, and a title that contains the phrase ""awesome title""
 &page=      1                                       // get the first page...
 &pageSize=  10                                      // ...which contains 10 posts
 
 More info you can find here: github.com/Biarity/Sieve#send-a-request";
 
-            return Ok(options);
+            //return Ok(new { options, result });
+            return Ok(result);
         }
 
         [Authorize(Roles = "admin,manager,employee")]
