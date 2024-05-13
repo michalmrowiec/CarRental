@@ -47,10 +47,11 @@ export function SignIn() {
                 });
                 
                 sessionStorage.setItem('userRole', data.role);
+                sessionStorage.setItem('userToken', data.token);
                 console.log('pomyslnie zalogowano');
-                // console.log(data.JwtToken);
                 navigate('/'); // Przekierowanie do strony głównej
                 window.location.reload();
+                // console.log(data);
             } else {
                 console.log("Nieudane logowanie. Sprawdź dane logowania i spróbuj ponownie.");
             }
@@ -59,8 +60,9 @@ export function SignIn() {
             setError(true);
         }
     };    
-    console.log(error);
+    
     return (
+                
         <div className='divv d-flex justify-content-center align-items-center bg-light'>
             <Form className='bg-white p-3 rounded w-25'>
                 <h2>Sign In</h2>
