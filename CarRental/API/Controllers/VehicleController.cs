@@ -66,15 +66,15 @@ More info you can find here: github.com/Biarity/Sieve#send-a-request";
         }
 
         [Authorize(Roles = "admin,manager,employee")]
-        [HttpPost("upload-image/{vehicleId}")]
-        public async Task<ActionResult> UploadImage(IFormFile file, [FromRoute] Guid vehicleId)
+        [HttpPost("upload-image/{vehicleId}/{isCover}")]
+        public async Task<ActionResult> UploadImage(IFormFile file, [FromRoute] Guid vehicleId, [FromRoute] bool isCover)
         {
             byte[] imageData;
             using MemoryStream memoryStream = new();
             await file.CopyToAsync(memoryStream);
             imageData = memoryStream.ToArray();
 
-            var result = await _mediator.Send(new AddImageCommand(imageData, file.FileName, vehicleId));
+            var result = await _mediator.Send(new AddImageCommand(imageData, file.FileName, isCover, vehicleId));
 
             if (result.Success)
                 return Created(result.ReturnedObj ?? "", null);

@@ -40,9 +40,15 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddImage
             var updateVehicleCommand = new UpdateVehicleCommand
             {
                 Id = vehicle.Id,
-                ImageUrls = vehicle.ImageUrls == null ?
-                string.Concat(filePath, ';') : string.Concat(vehicle.ImageUrls, filePath, ';')
             };
+
+            if (request.IsCover)
+                updateVehicleCommand.CoverImageUrl = filePath;
+            else
+                updateVehicleCommand.ImageUrls = vehicle.ImageUrls == null ?
+                string.Concat(filePath, ';')
+                : string.Concat(vehicle.ImageUrls, filePath, ';');
+
 
             var result = await _mediator.Send(updateVehicleCommand, cancellationToken);
 

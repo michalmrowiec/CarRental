@@ -65,6 +65,7 @@ namespace CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle
             vehicle.Currency = request.Currency ?? vehicle.Currency;
             vehicle.VatRate = request.VatRate ?? vehicle.VatRate;
             vehicle.ImageUrls = request.ImageUrls ?? vehicle.ImageUrls;
+            vehicle.CoverImageUrl = request.CoverImageUrl ?? vehicle.CoverImageUrl;
 
             try
             {

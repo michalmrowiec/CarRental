@@ -29,5 +29,6 @@ namespace CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle
         public string? Currency { get; set; }
         public decimal? VatRate { get; set; }
         public string? ImageUrls { get; set; } // URLs separated by ;
+        public string? CoverImageUrl { get; set; }
     }
 }
