@@ -1,5 +1,6 @@
 ﻿using CarRental.API.Services;
 using CarRental.Application.Functions.Rentals.Commands.AddReservation;
+using CarRental.Application.Functions.Rentals.Commands.CancelReservation;
 using CarRental.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,6 +37,21 @@ namespace CarRental.API.Controllers
 
             if (result.Status == Application.Functions.ResponseBase.ResponseStatus.ValidationError)
                 return BadRequest(result.ValidationErrors);
+
+            return BadRequest(result.Message);
+        }
+
+        [Authorize]
+        [HttpPut("{RentalId}")]
+        public async Task<ActionResult> CancelReservation([FromRoute] Guid RentalId)
+        {
+            var result = await _mediator.Send(new CancelReservationCommand(RentalId));
+
+            if (result.Success)
+                return Ok();
+
+            if (result.Status == Application.Functions.ResponseBase.ResponseStatus.NotFound)
+                return NotFound();
 
             return BadRequest(result.Message);
         }
