@@ -1,0 +1,30 @@
+/* .form-check-input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 45%;
+  } */
+
+  .avaiableCheckBox label {
+    display: flex;
+    align-items: center;
+    margin-top: 8%;
+  }
+  
+  .form-check-input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem; /* Dodatkowy odstęp między checkboxem a tekstem */
+    /* margin-top: 45%; */
+  }
+
+  .notification {
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f44336;
+    color: white;
+    padding: 16px;
+    border-radius: 4px;
+  }

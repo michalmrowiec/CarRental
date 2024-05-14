@@ -66,7 +66,7 @@ const NavMenu = () => {
                             <NavLink tag={Link} className="text-dark text-decoration" to="/vehiclesList">Vehicles List</NavLink>
                         </NavItem>
 
-                        {role === 'customer' || role === 'employee' && isLoggedIn ? (
+                        {isLoggedIn ? (
                             <>
                                 <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown} innerRef={dropdownRef}>
                                     <DropdownToggle caret className="btn btn-light d-flex align-items-center">
@@ -76,8 +76,12 @@ const NavMenu = () => {
                                         </div>
                                     </DropdownToggle>
                                     <DropdownMenu>
+                                    {role === 'customer' && (
                                         <DropdownItem tag={Link} className="text-dark text-decoration" to="/User">My profile</DropdownItem>
+                                    )}
+                                    {role === 'employee' && (
                                         <DropdownItem tag={Link} className="text-dark text-decoration" to="/AddVehicle">Add Vehicle</DropdownItem>
+                                    )}
                                         <DropdownItem onClick={handleLogout} className="text-dark text-decoration">Log-Out</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
