@@ -21,12 +21,12 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddImage
 
             var vehicleResponse = await _mediator.Send(new GetVehicleByIdQuery(request.VehicleId), cancellationToken);
 
-            if (!vehicleResponse.Success || vehicleResponse.ReturnedObj == null)
+            if (!vehicleResponse.Success || vehicleResponse.ReturnedObject == null)
             {
                 return new ResponseBase<string>(false, "Vehicle does not exist.", ResponseBase.ResponseStatus.NotFound);
             }
 
-            Vehicle vehicle = vehicleResponse.ReturnedObj;
+            Vehicle vehicle = vehicleResponse.ReturnedObject;
 
             byte[] fileExist = await _fileRepository.GetFileAsync(FileType.VehicleImage, request.FileName) ?? Array.Empty<byte>();
 
@@ -40,13 +40,19 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddImage
             var updateVehicleCommand = new UpdateVehicleCommand
             {
                 Id = vehicle.Id,
-                ImageUrls = vehicle.ImageUrls == null ?
-                string.Concat(filePath, ';') : string.Concat(vehicle.ImageUrls, filePath, ';')
             };
+
+            if (request.IsCover)
+                updateVehicleCommand.CoverImageUrl = filePath;
+            else
+                updateVehicleCommand.ImageUrls = vehicle.ImageUrls == null ?
+                string.Concat(filePath, ';')
+                : string.Concat(vehicle.ImageUrls, filePath, ';');
+
 
             var result = await _mediator.Send(updateVehicleCommand, cancellationToken);
 
-            if (!result.Success || result.ReturnedObj == null)
+            if (!result.Success || result.ReturnedObject == null)
             {
                 _fileRepository.DeleteFile(filePath);
                 return new ResponseBase<string>(false, "Something went wrong.", ResponseBase.ResponseStatus.Error);

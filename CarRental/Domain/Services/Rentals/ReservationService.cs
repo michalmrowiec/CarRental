@@ -22,12 +22,24 @@ namespace CarRental.Domain.Services.Rentals
             var result = GetAllReservedDays(_rentals).Intersect(ListDaysBetweenDates(startDate.Date, endDate.Date));
             return !result.Any();
         }
+
         public bool CheckReservationAvailability(Guid vehicleId, DateTime startDate, DateTime endDate)
         {
             var allReservations = GetAllReservedDays(_rentals.Where(r => r.VehicleId.Equals(vehicleId)).ToList()).Select(d => d.Date);
             var newReservationDates = ListDaysBetweenDates(startDate.Date, endDate.Date).Select(d => d.Date);
             var result = allReservations.Intersect(newReservationDates).ToList();
             return !result.Any();
+        }
+
+        public IList<Rental> GetAllReservationBetweenDates(DateTime startDate, DateTime endDate)
+        {
+            var selectedDates = ListDaysBetweenDates(startDate, endDate);
+
+            var result = _rentals
+                .Where(r => ListDaysBetweenDates(r.StartDate, r.EndDate).Intersect(selectedDates).Any())
+                .ToList();
+
+            return result;
         }
 
         public List<DateTime> GetAllReservedDays(IList<Rental> rentals)
@@ -43,7 +55,7 @@ namespace CarRental.Domain.Services.Rentals
             return allReservedDays;
         }
 
-        private List<DateTime> ListDaysBetweenDates(DateTime startDate, DateTime endDate)
+        private static List<DateTime> ListDaysBetweenDates(DateTime startDate, DateTime endDate)
         {
             var totalDays = (endDate - startDate).Days;
             var reservedDays = new List<DateTime>();

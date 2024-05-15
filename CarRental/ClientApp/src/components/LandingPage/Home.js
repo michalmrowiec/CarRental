@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import rentalBackground from '../images/rental_background.jpeg';
+// import rentalBackground from '../images/rental_background.jpeg';
+import rentalBackground from '../../images/rental_background.jpeg';
 
 export class Home extends Component {
   static displayName = Home.name;

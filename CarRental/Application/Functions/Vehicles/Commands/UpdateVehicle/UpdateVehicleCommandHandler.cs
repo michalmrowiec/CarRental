@@ -23,7 +23,7 @@ namespace CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle
         {
             var vehicleResponse = await _mediator.Send(new GetVehicleByIdQuery(request.Id), cancellationToken);
 
-            if (!vehicleResponse.Success || vehicleResponse.ReturnedObj == null)
+            if (!vehicleResponse.Success || vehicleResponse.ReturnedObject == null)
             {
                 _logger.LogWarning("Failed to update vehicle with ID: {VehicleId} - vehicle does not exist.", request.Id);
                 return new ResponseBase<Vehicle>(false, "Vehicle does not exist", ResponseBase.ResponseStatus.NotFound);
@@ -37,7 +37,7 @@ namespace CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle
                 return new ResponseBase<Vehicle>(validationResult);
             }
 
-            var vehicle = vehicleResponse.ReturnedObj;
+            var vehicle = vehicleResponse.ReturnedObject;
 
             Vehicle updatedVehicle;
 
@@ -65,6 +65,7 @@ namespace CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle
             vehicle.Currency = request.Currency ?? vehicle.Currency;
             vehicle.VatRate = request.VatRate ?? vehicle.VatRate;
             vehicle.ImageUrls = request.ImageUrls ?? vehicle.ImageUrls;
+            vehicle.CoverImageUrl = request.CoverImageUrl ?? vehicle.CoverImageUrl;
 
             try
             {

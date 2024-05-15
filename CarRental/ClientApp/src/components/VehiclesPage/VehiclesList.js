@@ -11,17 +11,54 @@ export class VehiclesList extends Component {
             pageSize: 10,
             page: 1,
             currentPage: 0,
-            totalItems: 0
+            totalItems: 0,
+            from: null,
+            to: null,
+            brandsToFiltier: { 'Wszystkie': '' },
+            brand: 'Wszystkie'
         };
     }
 
     componentDidMount() {
-        this.giveVehicles(this.state.page, this.state.pageSize);
+        this.getOptions();
+        this.giveVehicles(this.state.page, this.state.pageSize, null, null);
+    }
+
+    async getOptions() {
+        const response = await fetch('https://localhost:44403/api/v1/Vehicle/get-filtered', {
+            method: 'OPTIONS',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 200) {
+            const data = await response.json();
+
+            let brands = {
+                'Wszystkie': '', ...data.brand.reduce((obj, item) => {
+                    obj[item] = item;
+                    return obj;
+                }, {})
+            };
+
+            this.setState({
+                brandsToFiltier: brands
+            });
+        }
     }
 
     async giveVehicles(page, pageSize) {
         if (pageSize === undefined)
             pageSize = this.state.pageSize;
+
+        if (this.state.from > this.state.to) {
+            this.setState({
+                from: '',
+                to: ''
+            })
+        }
+
 
         const response = await fetch('https://localhost:44403/api/v1/Vehicle/get-filtered', {
             method: 'POST',
@@ -29,22 +66,22 @@ export class VehiclesList extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                filters: '',
+                filters: 'brand@=' + this.state.brandsToFiltier[this.state.brand],
                 sorts: '',
                 page: page,
-                pageSize: pageSize
+                pageSize: pageSize,
+                from: this.state.from === '' ? null : this.state.from,
+                to: this.state.to === '' ? null : this.state.to
             })
         });
 
         if (response.status === 200) {
-            console.log("downloaded");
 
             const data = await response.json();
-            console.log(data);
 
             const vehicles = data.items.map(item => ({
                 name: item.brand + ' ' + item.model,
-                image: 'images/VehicleImage/sample_car.jpeg',//item.imageUrls.slice(0, -1),
+                image: 'images/VehicleImage/sample_car.jpeg',
                 description: item.carEquipment,
                 price: item.rentalNetPricePerDay + item.currency
             }));
@@ -59,10 +96,39 @@ export class VehiclesList extends Component {
         }
     }
 
+    handleBrandChange = (event) => {
+        this.setState({ brand: event.target.value });
+    }
+
     render() {
-        const { vehicles, pageSize, currentPage, totalPages } = this.state;
+        const { vehicles, pageSize, currentPage, totalPages, brandsToFiltier, brand } = this.state;
+        console.log(brandsToFiltier);
         return (
             <div className="container">
+
+                <select value={brand} onChange={this.handleBrandChange}>
+                    {Object.keys(brandsToFiltier).map((key) => (
+                        <option key={key} value={key}>
+                            {key}
+                        </option>
+                    ))}
+                </select>
+
+                <div>
+                    <label>From: </label>
+                    <input type="date" onChange={(e) => this.setState({ from: e.target.value })} value={this.state.from} />
+                    <label>To: </label>
+                    <input type="date" onChange={(e) => this.setState({ to: e.target.value })} value={this.state.to} />
+                    <button onClick={() => {
+                        this.giveVehicles(1, this.state.pageSize)
+                    }}>Filtruj</button>
+
+                    <button onClick={() => {
+                        this.setState({ from: '', to: '', brand: 'Wszystkie' });
+                        this.giveVehicles(1, this.state.pageSize);
+                    }}>Wyczyść filtry</button>
+                </div>
+
                 {vehicles.map((vehicle, index) => (
                     <VehicleCard key={index} vehicle={vehicle} />
                 ))}

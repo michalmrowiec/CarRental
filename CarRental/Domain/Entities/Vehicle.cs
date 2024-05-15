@@ -28,6 +28,7 @@
         public string Currency { get; set; }
         public decimal VatRate { get; set; }
         public string? ImageUrls { get; set; } // URLs separated by ;
+        public string? CoverImageUrl { get; set; }
 
         public IList<Insurance>? Insurances { get; set; }
         public IList<VehicleService>? VehicleServices { get; set; }
