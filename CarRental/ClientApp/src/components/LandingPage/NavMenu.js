@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import '../style/NavMenu.css';
-import carLogo from '../images/car_rental.svg';
-import userLogo from '../images/user.svg';
+import '../../style/NavMenu.css';
+import carLogo from '../../images/car_rental.svg';
+import userLogo from '../../images/user.svg';
+
 
 const NavMenu = () => {
     const [collapsed, setCollapsed] = useState(true);
@@ -65,7 +66,7 @@ const NavMenu = () => {
                             <NavLink tag={Link} className="text-dark text-decoration" to="/vehiclesList">Vehicles List</NavLink>
                         </NavItem>
 
-                        {role === 'customer' && isLoggedIn ? (
+                        {isLoggedIn ? (
                             <>
                                 <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown} innerRef={dropdownRef}>
                                     <DropdownToggle caret className="btn btn-light d-flex align-items-center">
@@ -75,7 +76,12 @@ const NavMenu = () => {
                                         </div>
                                     </DropdownToggle>
                                     <DropdownMenu>
+                                    {role === 'customer' && (
                                         <DropdownItem tag={Link} className="text-dark text-decoration" to="/User">My profile</DropdownItem>
+                                    )}
+                                    {role === 'employee' && (
+                                        <DropdownItem tag={Link} className="text-dark text-decoration" to="/AddVehicle">Add Vehicle</DropdownItem>
+                                    )}
                                         <DropdownItem onClick={handleLogout} className="text-dark text-decoration">Log-Out</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
