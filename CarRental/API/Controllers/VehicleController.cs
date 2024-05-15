@@ -31,7 +31,7 @@ namespace CarRental.API.Controllers
             var result = await _mediator.Send(query);
 
             if (result.Success)
-                return Ok(result.ReturnedObj);
+                return Ok(result.ReturnedObject);
 
             return BadRequest(result.Message);
         }
@@ -49,7 +49,7 @@ namespace CarRental.API.Controllers
 
 More info you can find here: github.com/Biarity/Sieve#send-a-request";
 
-            //return Ok(new { options, result });
+            //return Ok(new { QueryFormat = options, AvailableValues = result });
             return Ok(result);
         }
 
@@ -60,7 +60,7 @@ More info you can find here: github.com/Biarity/Sieve#send-a-request";
             var result = await _mediator.Send(addVehicleCommand);
 
             if (result.Success)
-                return Created("", result.ReturnedObj);
+                return Created("", result.ReturnedObject);
 
             return BadRequest(result.ValidationErrors);
         }
@@ -77,7 +77,7 @@ More info you can find here: github.com/Biarity/Sieve#send-a-request";
             var result = await _mediator.Send(new AddImageCommand(imageData, file.FileName, isCover, vehicleId));
 
             if (result.Success)
-                return Created(result.ReturnedObj ?? "", null);
+                return Created(result.ReturnedObject ?? "", null);
 
             return BadRequest(result.Message);
         }
@@ -89,7 +89,7 @@ More info you can find here: github.com/Biarity/Sieve#send-a-request";
             var result = await _mediator.Send(updateVehicleCommand);
 
             if (result.Success)
-                return Ok(result.ReturnedObj);
+                return Ok(result.ReturnedObject);
 
             if (result.Status == Application.Functions.ResponseBase.ResponseStatus.ValidationError)
                 return BadRequest(result.ValidationErrors);

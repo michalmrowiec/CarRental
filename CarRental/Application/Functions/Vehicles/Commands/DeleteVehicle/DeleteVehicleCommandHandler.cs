@@ -21,12 +21,12 @@ namespace CarRental.Application.Functions.Vehicles.Commands.DeleteVehicle
         {
             var response = await _mediator.Send(new GetVehicleByIdQuery(request.VehicleId), cancellationToken);
 
-            if (!response.Success || response.ReturnedObj == null)
+            if (!response.Success || response.ReturnedObject == null)
             {
                 return new ResponseBase(false, "Vehicle does not exist.", ResponseBase.ResponseStatus.NotFound);
             }
 
-            var vehicle = response.ReturnedObj;
+            var vehicle = response.ReturnedObject;
 
             var result = await _vehicleRepository.DeleteAsync(vehicle);
 

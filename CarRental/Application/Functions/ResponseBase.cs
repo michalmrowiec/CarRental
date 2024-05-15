@@ -54,17 +54,24 @@ namespace CarRental.Application.Functions
 
     public class ResponseBase<T> : ResponseBase where T : class
     {
-        public T? ReturnedObj { get; set; }
+        public T? ReturnedObject { get; set; }
 
-        public ResponseBase(T obj)
+        public ResponseBase(T returnedObject)
         {
             Success = true;
             ValidationErrors = new();
-            ReturnedObj = obj;
+            ReturnedObject = returnedObject;
         }
 
         public ResponseBase(ValidationResult validationResult) : base(validationResult) { }
 
-        public ResponseBase(bool status, string message, ResponseStatus responseStatus) : base(status, message, responseStatus) { }
+        public ResponseBase(bool status, string message, ResponseStatus responseStatus)
+            : base(status, message, responseStatus) { }
+
+        public ResponseBase(bool status, string message, ResponseStatus responseStatus, T returnedObject)
+            : base(status, message, responseStatus)
+        {
+            ReturnedObject = returnedObject;
+        }
     }
 }

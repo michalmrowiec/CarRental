@@ -12,6 +12,54 @@ namespace CarRental.Infrastructure
 
         protected override SievePropertyMapper MapProperties(SievePropertyMapper mapper)
         {
+            mapper.Property<Rental>(r => r.IsCanceled)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.ClientId)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.IsPaid)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.IsVehiclePickedUp)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.IsVehicleReturned)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.VehicleId)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.IsConfirmedByEmployee)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.Id)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.StartDate)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.EndDate)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.CreatedAt)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Rental>(r => r.UpdatedAt)
+                .CanSort()
+                .CanFilter();
+
             mapper.Property<Vehicle>(v => v.Brand)
                 .CanSort()
                 .CanFilter();

@@ -25,12 +25,12 @@ namespace CarRental.Application.Functions.Rentals.Commands.AddReservation
         {
             var vehicleResponse = await _mediator.Send(new GetVehicleByIdQuery(request.VehicleId));
 
-            if (!vehicleResponse.Success || vehicleResponse.ReturnedObj == null)
+            if (!vehicleResponse.Success || vehicleResponse.ReturnedObject == null)
             {
                 return new ResponseBase<ReservationDto>(false, "Vehicle does not exist.", ResponseBase.ResponseStatus.NotFound);
             }
 
-            var vehicle = vehicleResponse.ReturnedObj;
+            var vehicle = vehicleResponse.ReturnedObject;
 
             var allRentalsForVehicle = await _rentalRepository.GetAllForVehicleAsync(request.VehicleId);
             var rentalService = new ReservationService(allRentalsForVehicle);
