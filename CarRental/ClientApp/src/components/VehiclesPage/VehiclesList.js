@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import VehicleCard from './VehicleCard';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Pagination, PaginationItem, PaginationLink, Input } from 'reactstrap';
 
 
 export class VehiclesList extends Component {
@@ -15,7 +15,8 @@ export class VehiclesList extends Component {
             from: null,
             to: null,
             brandsToFiltier: { 'Wszystkie': '' },
-            brand: 'Wszystkie'
+            brand: 'Wszystkie',
+            imageUrls: null
         };
     }
 
@@ -81,7 +82,8 @@ export class VehiclesList extends Component {
 
             const vehicles = data.items.map(item => ({
                 name: item.brand + ' ' + item.model,
-                image: 'images/VehicleImage/sample_car.jpeg',
+                // image: 'images/VehicleImage/sample_car.jpeg',
+                image: item.coverImageUrl,
                 description: item.carEquipment,
                 price: item.rentalNetPricePerDay + item.currency
             }));
@@ -116,9 +118,9 @@ export class VehiclesList extends Component {
 
                 <div>
                     <label>From: </label>
-                    <input type="date" onChange={(e) => this.setState({ from: e.target.value })} value={this.state.from} />
+                    <Input type="date" onChange={(e) => this.setState({ from: e.target.value })} value={this.state.from} />
                     <label>To: </label>
-                    <input type="date" onChange={(e) => this.setState({ to: e.target.value })} value={this.state.to} />
+                    <Input type="date" onChange={(e) => this.setState({ to: e.target.value })} value={this.state.to} />
                     <button onClick={() => {
                         this.giveVehicles(1, this.state.pageSize)
                     }}>Filtruj</button>

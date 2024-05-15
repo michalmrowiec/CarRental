@@ -28,3 +28,11 @@
     padding: 16px;
     border-radius: 4px;
   }
+
+  .success-notification {
+    background-color: #4CAF50; /* Zielony kolor tła dla sukcesu */
+  }
+  
+  .error-notification {
+    background-color: #f44336; /* Czerwony kolor tła dla błędu */
+  }

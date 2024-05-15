@@ -1,4 +1,3 @@
-// import { AboutUs } from "./components/AboutUs";
 import { AboutUs } from "./components/LandingPage/AboutUs";
 import { Vehicles } from "./components/Vehicles";
 import { VehiclesList } from "./components/VehiclesPage/VehiclesList"
@@ -6,7 +5,8 @@ import { Home } from "./components/LandingPage/Home";
 import { Join } from "./components/Join";
 import { SignIn } from "./components/SignIn";
 import User from "./components/User";
-import { AddVehicle } from "./components/VehiclesPage/AddVehicle";
+import AddVehicle  from "./components/VehiclesPage/AddVehicle";
+import AddVehicleImage  from "./components/VehiclesPage/AddVehicleImage";
 
 const AppRoutes = [
     {
@@ -40,6 +40,10 @@ const AppRoutes = [
     {
         path: '/AddVehicle',
         element: <AddVehicle />
+    },
+    {
+        path: '/AddVehicleImage',
+        element: <AddVehicleImage />
     }
 ];
 

@@ -1,34 +1,40 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import UserContext from '../../context/UserContext'; // Zaimportuj UserContext
 import '../../style/NavMenu.css';
 import carLogo from '../../images/car_rental.svg';
 import userLogo from '../../images/user.svg';
 
-
 const NavMenu = () => {
+    const { state, dispatch } = useContext(UserContext); // Użyj Contextu
     const [collapsed, setCollapsed] = useState(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem('userRole') !== null);
-    const [role, setRole] = useState(sessionStorage.getItem('userRole'));
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
+
+    // Zaktualizuj stan na podstawie danych z Contextu
+    const isLoggedIn = state.token !== null;
+    const role = state.role;
+    const token = state.token;
 
     const toggleNavbar = () => setCollapsed(!collapsed);
     const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
 
+    // Zaktualizuj funkcję handleLogout, aby czyściła stan kontekstu
     const handleLogout = () => {
-        sessionStorage.removeItem('userRole');
+        sessionStorage.clear(); // Wyczyść wszystkie dane sesji
+        dispatch({ type: 'LOGOUT' }); // Wywołaj akcję wylogowania w Context API
         navigate('/'); // Przekierowanie do strony głównej
         window.location.reload();
     };
 
     useEffect(() => {
-        const isLoggedIn = sessionStorage.getItem('userRole') !== null;
-        setIsLoggedIn(isLoggedIn);
-        setRole(sessionStorage.getItem('userRole'));
-    }, []);
+        console.log(`Czy użytkownik jest zalogowany: ${isLoggedIn}`);
+        console.log(`Rola użytkownika: ${role}`);
+        console.log(`token użytkownika: ${token}`);
+    }, [isLoggedIn, role]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
