@@ -46,7 +46,7 @@ const AddVehicleImage = () => {
 
       if (response.ok) {
         alert('Image uploaded successfully!');
-        navigate('/SimpleVehiclesList'); // Przekierowanie z powrotem do listy pojazdów
+        navigate('/MenageVehiclesList'); // Przekierowanie z powrotem do listy pojazdów
       } else {
         setError('Failed to upload image. Please try again.');
       }
