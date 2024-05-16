@@ -1,85 +1,77 @@
-import React, { Component } from 'react';
-import UserContext from '../../context/UserContext'; // Zaimportuj UserContext
+import React, { useState, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import UserContext from '../../context/UserContext';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
-class AddVehicleImage extends Component {
-  static contextType = UserContext;
-  
-  constructor(props) {
-    super(props);
-    this.state = {
-      file: null,
-      error: null,
-      uploading: false
-    };
+const AddVehicleImage = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { state: userState } = useContext(UserContext);
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const vehicleId = location.state?.vehicleId; // Pobieramy vehicleId z lokacji
+
+  if (!vehicleId) {
+    // Jeśli nie ma vehicleId, przekieruj z powrotem do listy pojazdów
+    navigate('/SimpleVehiclesList');
   }
-  
 
-  handleFileChange = (e) => {
-    const file = e.target.files[0];
-    this.setState({ file });
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    setError(null); // Resetowanie błędów
   };
 
-  handleDragOver = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  };
-
-  handleDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    this.setState({ file });
-  };
-
-  handleSubmit = async (e) => {
-    e.preventDefault();
-    const { file } = this.state;
-    const userToken = this.context.state.token;
-    console.log('token w add image ' + userToken);
     if (!file) {
-      this.setState({ error: 'Please select a file.' });
+      setError('Please select a file to upload.');
       return;
     }
-    const vehicleId = sessionStorage.getItem('vehicleId');
-    console.log(vehicleId);
-    if (!vehicleId) {
-      this.setState({ error: 'No vehicle selected.' });
-      return;
-    }
-    this.setState({ uploading: true });
+
+    setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
+
     try {
       const response = await fetch(`https://localhost:44403/api/v1/Vehicle/upload-image/${vehicleId}/true`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${userToken}`
+          'Authorization': `Bearer ${userState.token}`
         },
         body: formData
       });
+
+      setUploading(false);
+
       if (response.ok) {
-        this.setState({ error: null, uploading: false });
         alert('Image uploaded successfully!');
+        navigate('/SimpleVehiclesList'); // Przekierowanie z powrotem do listy pojazdów
       } else {
-        throw new Error('Failed to upload image.');
+        setError('Failed to upload image. Please try again.');
       }
     } catch (error) {
       console.error('Error uploading image:', error);
-      this.setState({ error: 'Error uploading image.', uploading: false });
+      setError('Error uploading image. Please try again.');
+      setUploading(false);
     }
-  };  
+  };
 
-  render() {
-    const { error, uploading } = this.state;
-    return (
-      <div className="add-vehicle-image">
-        <h2>Add Vehicle Image</h2>
-        <form onSubmit={this.handleSubmit} onDragOver={this.handleDragOver} onDrop={this.handleDrop}>
-          <input type="file" onChange={this.handleFileChange} />
-          <button type="submit" disabled={uploading}>Upload Image</button>
-        </form>
-        {error && <div className="error">{error}</div>}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="add-vehicle-image">
+      <h2>Add Vehicle Image</h2>
+      <Form onSubmit={handleSubmit}>
+        <FormGroup>
+          <Label for="vehicleImageFile">Vehicle Image</Label>
+          <Input type="file" name="file" id="vehicleImageFile" onChange={handleFileChange} />
+        </FormGroup>
+        <Button type="submit" color="primary" disabled={uploading}>
+          {uploading ? 'Uploading...' : 'Upload Image'}
+        </Button>
+      </Form>
+      {error && <div className="error-message">{error}</div>}
+    </div>
+  );
+};
 
 export default AddVehicleImage;

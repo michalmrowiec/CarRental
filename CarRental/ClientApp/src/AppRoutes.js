@@ -7,6 +7,7 @@ import { SignIn } from "./components/SignIn";
 import User from "./components/User";
 import AddVehicle  from "./components/VehiclesPage/AddVehicle";
 import AddVehicleImage  from "./components/VehiclesPage/AddVehicleImage";
+import MenageVehiclesList from "./components/VehiclesPage/MenageVehiclesList";
 
 const AppRoutes = [
     {
@@ -44,7 +45,11 @@ const AppRoutes = [
     {
         path: '/AddVehicleImage',
         element: <AddVehicleImage />
+    },{
+        path: '/MenageVehiclesList',
+        element: <MenageVehiclesList />
     }
+    
 ];
 
 export default AppRoutes;

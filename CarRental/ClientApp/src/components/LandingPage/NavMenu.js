@@ -2,31 +2,32 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import UserContext from '../../context/UserContext'; // Zaimportuj UserContext
+import UserContext from '../../context/UserContext';
 import '../../style/NavMenu.css';
 import carLogo from '../../images/car_rental.svg';
 import userLogo from '../../images/user.svg';
 
 const NavMenu = () => {
-    const { state, dispatch } = useContext(UserContext); // Użyj Contextu
+    const { state, dispatch } = useContext(UserContext);
     const [collapsed, setCollapsed] = useState(true);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [managementDropdownOpen, setManagementDropdownOpen] = useState(false);
+    const [userDropdownOpen, setUserDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
 
-    // Zaktualizuj stan na podstawie danych z Contextu
     const isLoggedIn = state.token !== null;
     const role = state.role;
     const token = state.token;
+    const email = state.email;
 
     const toggleNavbar = () => setCollapsed(!collapsed);
-    const toggleDropdown = () => setDropdownOpen(prevState => !prevState);
+    const toggleManagementDropdown = () => setManagementDropdownOpen(prevState => !prevState);
+    const toggleUserDropdown = () => setUserDropdownOpen(prevState => !prevState);
 
-    // Zaktualizuj funkcję handleLogout, aby czyściła stan kontekstu
     const handleLogout = () => {
-        sessionStorage.clear(); // Wyczyść wszystkie dane sesji
-        dispatch({ type: 'LOGOUT' }); // Wywołaj akcję wylogowania w Context API
-        navigate('/'); // Przekierowanie do strony głównej
+        sessionStorage.clear();
+        dispatch({ type: 'LOGOUT' });
+        navigate('/');
         window.location.reload();
     };
 
@@ -39,7 +40,8 @@ const NavMenu = () => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setDropdownOpen(false);
+                setManagementDropdownOpen(false);
+                setUserDropdownOpen(false);
             }
         };
 
@@ -71,27 +73,34 @@ const NavMenu = () => {
                         <NavItem>
                             <NavLink tag={Link} className="text-dark text-decoration" to="/vehiclesList">Vehicles List</NavLink>
                         </NavItem>
-
+                        {isLoggedIn && role === 'employee' && (
+                        <NavItem>
+                        <Dropdown isOpen={managementDropdownOpen} toggle={toggleManagementDropdown} innerRef={dropdownRef} className="me-3">
+                            <DropdownToggle caret className="btn btn-light d-flex align-items-center bg-transparent border-0">
+                                Management
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem tag={Link} className="text-dark text-decoration" to="/AddVehicle">Add Vehicle</DropdownItem>
+                                <DropdownItem tag={Link} className="text-dark text-decoration" to="/MenageVehiclesList">Menage Vehicles</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                        </NavItem>      
+                        )}
                         {isLoggedIn ? (
-                            <>
-                                <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown} innerRef={dropdownRef}>
+                            <NavItem>
+                                <Dropdown isOpen={userDropdownOpen} toggle={toggleUserDropdown} innerRef={dropdownRef}>
                                     <DropdownToggle caret className="btn btn-light d-flex align-items-center">
                                         <div className="">
                                             <img src={userLogo} alt='userLogo' className='mr-2 img-fluid user-logo'></img>
-                                            <span className="text-dark">{localStorage.getItem('loggedInUser')}</span>
+                                            <span className="text-dark">{email}</span>
                                         </div>
                                     </DropdownToggle>
                                     <DropdownMenu>
-                                    {role === 'customer' && (
                                         <DropdownItem tag={Link} className="text-dark text-decoration" to="/User">My profile</DropdownItem>
-                                    )}
-                                    {role === 'employee' && (
-                                        <DropdownItem tag={Link} className="text-dark text-decoration" to="/AddVehicle">Add Vehicle</DropdownItem>
-                                    )}
                                         <DropdownItem onClick={handleLogout} className="text-dark text-decoration">Log-Out</DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
-                            </>
+                            </NavItem>
                         ) : (
                             <>
                                 <NavItem>
