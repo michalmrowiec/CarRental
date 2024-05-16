@@ -80,21 +80,13 @@ export class VehiclesList extends Component {
 
             const data = await response.json();
 
-            const vehicles = data.items.map(item => ({
-                name: item.brand + ' ' + item.model,
-                // image: 'images/VehicleImage/sample_car.jpeg',
-                image: item.coverImageUrl,
-                description: item.carEquipment,
-                price: item.rentalNetPricePerDay + item.currency
-            }));
-
             this.setState({
-                vehicles,
+                vehicles: data.items, // Teraz 'vehicles' będzie zawierać wszystkie dane z odpowiedzi
                 totalPages: data.totalPages,
                 currentPage: page,
                 pageSize: pageSize,
                 totalItems: data.totalItems
-            });
+              });
         }
     }
 
