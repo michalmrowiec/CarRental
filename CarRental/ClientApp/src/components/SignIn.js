@@ -35,11 +35,11 @@ export function SignIn() {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Odpowiedź z serwera:', data);
+                // console.log('Odpowiedź z serwera:', data);
                 // Użyj dispatch do aktualizacji stanu w Context API
                 sessionStorage.setItem('userToken', data.token);
                 sessionStorage.setItem('userRole', data.role);
-                sessionStorage.setItem('userEmail', emailAddress);
+                sessionStorage.setItem('userEmail', data.userEmail);
 
                 
                 dispatch({
@@ -47,7 +47,7 @@ export function SignIn() {
                     payload: {
                         token: data.token,
                         role: data.role,
-                        email: data.email
+                        email: data.userEmail
                     }
                 });
                 

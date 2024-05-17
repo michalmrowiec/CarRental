@@ -29,13 +29,14 @@ const NavMenu = () => {
         dispatch({ type: 'LOGOUT' });
         navigate('/');
         window.location.reload();
+        console.log(token);
     };
 
-    useEffect(() => {
-        console.log(`Czy użytkownik jest zalogowany: ${isLoggedIn}`);
-        console.log(`Rola użytkownika: ${role}`);
-        console.log(`token użytkownika: ${token}`);
-    }, [isLoggedIn, role]);
+    // useEffect(() => {
+    //     console.log(`Czy użytkownik jest zalogowany: ${isLoggedIn}`);
+    //     console.log(`Rola użytkownika: ${role}`);
+    //     console.log(`token użytkownika: ${token}`);
+    // }, [isLoggedIn, role]);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -68,14 +69,11 @@ const NavMenu = () => {
                             <NavLink tag={Link} className="text-dark text-decoration" to="/AboutUs">AboutUs</NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink tag={Link} className="text-dark text-decoration" to="/vehicles">Vehicles</NavLink>
-                        </NavItem>
-                        <NavItem>
                             <NavLink tag={Link} className="text-dark text-decoration" to="/vehiclesList">Vehicles List</NavLink>
                         </NavItem>
                         {isLoggedIn && role === 'employee' && (
                         <NavItem>
-                        <Dropdown isOpen={managementDropdownOpen} toggle={toggleManagementDropdown} innerRef={dropdownRef} className="me-3">
+                        <Dropdown isOpen={managementDropdownOpen} toggle={toggleManagementDropdown} innerref={dropdownRef} className="me-3">
                             <DropdownToggle caret className="btn btn-light d-flex align-items-center bg-transparent border-0">
                                 Management
                             </DropdownToggle>
@@ -88,7 +86,7 @@ const NavMenu = () => {
                         )}
                         {isLoggedIn ? (
                             <NavItem>
-                                <Dropdown isOpen={userDropdownOpen} toggle={toggleUserDropdown} innerRef={dropdownRef}>
+                                <Dropdown isOpen={userDropdownOpen} toggle={toggleUserDropdown} innerref={dropdownRef}>
                                     <DropdownToggle caret className="btn btn-light d-flex align-items-center">
                                         <div className="">
                                             <img src={userLogo} alt='userLogo' className='mr-2 img-fluid user-logo'></img>

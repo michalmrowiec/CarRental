@@ -5,11 +5,14 @@ import { Layout } from './components/Layout';
 import './custom.css';
 import { UserProvider } from './context/UserContext'; // Zaimportuj UserProvider
 import { VehicleProvider } from './context/VehicleContext'; // Zaimportuj VehicleProvider
+import { ReservationProvider } from './context/ReservationContext'; 
+
 
 
 const App = () => {
   return (
     <UserProvider> {/* Dodaj UserProvider */}
+    <ReservationProvider>
       <VehicleProvider> 
         <Layout>
           <Routes>
@@ -20,6 +23,7 @@ const App = () => {
           </Routes>
         </Layout>
       </VehicleProvider>
+      </ReservationProvider>
     </UserProvider> 
   );
 };

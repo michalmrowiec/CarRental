@@ -1,6 +1,5 @@
 import { AboutUs } from "./components/LandingPage/AboutUs";
-import { Vehicles } from "./components/Vehicles";
-import { VehiclesList } from "./components/VehiclesPage/VehiclesList"
+import VehiclesList  from "./components/VehiclesPage/VehiclesList"
 import { Home } from "./components/LandingPage/Home";
 import { Join } from "./components/Join";
 import { SignIn } from "./components/SignIn";
@@ -18,10 +17,6 @@ const AppRoutes = [
     {
         path: '/AboutUs',
         element: <AboutUs />
-    },
-    {
-        path: '/vehicles',
-        element: <Vehicles />
     },
     {
         path: '/vehiclesList',

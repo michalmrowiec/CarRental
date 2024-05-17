@@ -11,7 +11,7 @@ const VehicleCard = ({ vehicle }) => {
     setSelectedVehicle(vehicle); // Aktualizacja kontekstu z wybranym pojazdem
     navigate('/VehicleMain'); // Nawigacja do VehicleMain
   };
-  console.log(vehicle);
+  // console.log(vehicle);
 
   return (
     <Card>
