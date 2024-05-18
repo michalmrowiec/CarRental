@@ -13,6 +13,7 @@ const VehiclesList = () => {
   const [to, setTo] = useState('');
   const [brandsToFiltier, setBrandsToFiltier] = useState({ 'Wszystkie': '' });
   const [brand, setBrand] = useState('Wszystkie');
+  const [imageUrls, setImageUrls] = useState(null);
 
   const { selectedDate } = useContext(ReservationContext);
 
@@ -53,6 +54,35 @@ const VehiclesList = () => {
     }
   }, [selectedDate]);
 
+  useEffect(() => {
+    const getOptions = async () => {
+      const response = await fetch('https://localhost:44403/api/v1/Vehicle/get-filtered', {
+        method: 'OPTIONS',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        let brands = {
+          'Wszystkie': '', ...data.brand.reduce((obj, item) => {
+            obj[item] = item;
+            return obj;
+          }, {})
+        };
+
+        setBrandsToFiltier(brands);
+      }
+    };
+
+    getOptions();
+  }, []);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   return (
     <div className="container">
       <select
@@ -87,23 +117,23 @@ const VehiclesList = () => {
       <div className="mt-2 d-flex justify-content-center align-items-center">
         <Pagination size="">
           <PaginationItem disabled={currentPage === 1}>
-            <PaginationLink first onClick={() => setCurrentPage(1)} />
+            <PaginationLink first onClick={() => handlePageChange(1)} />
           </PaginationItem>
           <PaginationItem disabled={currentPage === 1}>
-            <PaginationLink previous onClick={() => setCurrentPage(currentPage - 1)} />
+            <PaginationLink previous onClick={() => handlePageChange(currentPage - 1)} />
           </PaginationItem>
-          {[...Array(totalPages)].map((page, i) =>
-            <PaginationItem active={i === currentPage - 1} key={i}>
-              <PaginationLink onClick={() => setCurrentPage(i + 1)}>
+          {[...Array(totalPages)].map((_, i) => (
+            <PaginationItem active={i + 1 === currentPage} key={i}>
+              <PaginationLink onClick={() => handlePageChange(i + 1)}>
                 {i + 1}
               </PaginationLink>
             </PaginationItem>
-          )}
+          ))}
           <PaginationItem disabled={currentPage === totalPages}>
-            <PaginationLink next onClick={() => setCurrentPage(currentPage + 1)} />
+            <PaginationLink next onClick={() => handlePageChange(currentPage + 1)} />
           </PaginationItem>
           <PaginationItem disabled={currentPage === totalPages}>
-            <PaginationLink last onClick={() => setCurrentPage(totalPages)} />
+            <PaginationLink last onClick={() => handlePageChange(totalPages)} />
           </PaginationItem>
         </Pagination>
         <div className="ms-2 d-flex">
@@ -111,7 +141,11 @@ const VehiclesList = () => {
             className="form-select form-select-sm"
             style={{ width: 'auto', marginBottom: '1rem' }}
             value={pageSize}
-            onChange={(e) => setPageSize(Number(e.target.value))}
+            onChange={(e) => {
+              const newSize = Number(e.target.value);
+              setPageSize(newSize);
+              handlePageChange(1); // Reset to first page with new page size
+            }}
           >
             <option value={2}>2</option>
             <option value={10}>10</option>
