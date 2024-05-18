@@ -71,7 +71,7 @@ const NavMenu = () => {
                         <NavItem>
                             <NavLink tag={Link} className="text-dark text-decoration" to="/vehiclesList">Vehicles List</NavLink>
                         </NavItem>
-                        {isLoggedIn && role === 'employee' && (
+                        {isLoggedIn && (role === 'employee' || role === 'admin' || role === 'menager') && (
                         <NavItem>
                         <Dropdown isOpen={managementDropdownOpen} toggle={toggleManagementDropdown} innerref={dropdownRef} className="me-3">
                             <DropdownToggle caret className="btn btn-light d-flex align-items-center bg-transparent border-0">
