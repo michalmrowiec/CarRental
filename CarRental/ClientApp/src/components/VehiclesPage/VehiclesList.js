@@ -13,18 +13,10 @@ const VehiclesList = () => {
   const [to, setTo] = useState('');
   const [brandsToFiltier, setBrandsToFiltier] = useState({ 'Wszystkie': '' });
   const [brand, setBrand] = useState('Wszystkie');
-  const [imageUrls, setImageUrls] = useState(null);
 
   const { selectedDate } = useContext(ReservationContext);
 
-  const giveVehicles = async (page, pageSize) => {
-    if (pageSize === undefined) pageSize = 10;
-
-    if (from > to) {
-      setFrom('');
-      setTo('');
-    }
-
+  const fetchVehicles = async (page, pageSize) => {
     const response = await fetch('https://localhost:44403/api/v1/Vehicle/get-filtered', {
       method: 'POST',
       headers: {
@@ -51,44 +43,22 @@ const VehiclesList = () => {
   };
 
   useEffect(() => {
-    const getOptions = async () => {
-      const response = await fetch('https://localhost:44403/api/v1/Vehicle/get-filtered', {
-        method: 'OPTIONS',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+    fetchVehicles(currentPage, pageSize);
+  }, [currentPage, pageSize]);
 
-      if (response.status === 200) {
-        const data = await response.json();
-        let brands = {
-          'Wszystkie': '', ...data.brand.reduce((obj, item) => {
-            obj[item] = item;
-            return obj;
-          }, {})
-        };
-
-        setBrandsToFiltier(brands);
-      }
-    };
-
-    
-
-    getOptions();
-    giveVehicles(currentPage, pageSize);
-
+  useEffect(() => {
     if (selectedDate) {
       setFrom(selectedDate.from);
       setTo(selectedDate.to);
     }
-  }, [selectedDate, currentPage, pageSize, brand, from, to, brandsToFiltier]);
+  }, [selectedDate]);
 
   return (
     <div className="container">
       <select
-        value={brand} // Użyj atrybutu value na elemencie select
+        value={brand}
         onChange={(e) => setBrand(e.target.value)}
-        >
+      >
         {Object.keys(brandsToFiltier).map((key) => (
           <option key={key} value={key}>
             {key}
@@ -101,12 +71,12 @@ const VehiclesList = () => {
         <Input type="date" onChange={(e) => setFrom(e.target.value)} value={from} />
         <label>To: </label>
         <Input type="date" onChange={(e) => setTo(e.target.value)} value={to} />
-        <button onClick={() => giveVehicles(1, pageSize)}>Filtruj</button>
+        <button onClick={() => fetchVehicles(1, pageSize)}>Filtruj</button>
         <button onClick={() => {
           setFrom('');
           setTo('');
           setBrand('Wszystkie');
-          giveVehicles(1, pageSize);
+          fetchVehicles(1, pageSize);
         }}>Wyczyść filtry</button>
       </div>
 
@@ -117,31 +87,31 @@ const VehiclesList = () => {
       <div className="mt-2 d-flex justify-content-center align-items-center">
         <Pagination size="">
           <PaginationItem disabled={currentPage === 1}>
-            <PaginationLink first onClick={() => giveVehicles(1)} />
+            <PaginationLink first onClick={() => setCurrentPage(1)} />
           </PaginationItem>
           <PaginationItem disabled={currentPage === 1}>
-            <PaginationLink previous onClick={() => giveVehicles(currentPage - 1)} />
+            <PaginationLink previous onClick={() => setCurrentPage(currentPage - 1)} />
           </PaginationItem>
           {[...Array(totalPages)].map((page, i) =>
             <PaginationItem active={i === currentPage - 1} key={i}>
-              <PaginationLink onClick={() => giveVehicles(i + 1)}>
+              <PaginationLink onClick={() => setCurrentPage(i + 1)}>
                 {i + 1}
               </PaginationLink>
             </PaginationItem>
           )}
           <PaginationItem disabled={currentPage === totalPages}>
-            <PaginationLink next onClick={() => giveVehicles(currentPage + 1)} />
+            <PaginationLink next onClick={() => setCurrentPage(currentPage + 1)} />
           </PaginationItem>
           <PaginationItem disabled={currentPage === totalPages}>
-            <PaginationLink last onClick={() => giveVehicles(totalPages)} />
+            <PaginationLink last onClick={() => setCurrentPage(totalPages)} />
           </PaginationItem>
         </Pagination>
         <div className="ms-2 d-flex">
           <select
             className="form-select form-select-sm"
             style={{ width: 'auto', marginBottom: '1rem' }}
-            value={pageSize} // Użyj atrybutu value na elemencie select
-            onChange={(e) => giveVehicles(1, e.target.value)}
+            value={pageSize}
+            onChange={(e) => setPageSize(Number(e.target.value))}
           >
             <option value={2}>2</option>
             <option value={10}>10</option>
