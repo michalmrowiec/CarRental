@@ -11,18 +11,17 @@ const VehicleCard = ({ vehicle }) => {
     setSelectedVehicle(vehicle); // Aktualizacja kontekstu z wybranym pojazdem
     navigate('/VehicleMain'); // Nawigacja do VehicleMain
   };
-  // console.log(vehicle);
 
   return (
-    <Card>
+    <Card style={{ height: '200px' }}>
       <div style={{ display: 'flex' }}>
-        <CardImg style={{ width: '30%', objectFit: 'cover' }} src={vehicle.coverImageUrl} alt="Card image cap" />
-        <CardBody style={{ width: '20%' }}>
+        <CardImg style={{ width: '30%', objectFit: 'cover', flex: '0 0 auto' }} src={vehicle.coverImageUrl} alt="Card image cap" />
+        <CardBody style={{ flex: '1' }}>
           <CardTitle tag="h5">{vehicle.brand} {vehicle.model}</CardTitle>
           <CardSubtitle tag="h6" className="mb-2 text-muted">{vehicle.rentalNetPricePerDay}/dzień</CardSubtitle>
           <Button onClick={handleRentClick}>Wynajmij</Button>
         </CardBody>
-        <CardBody style={{ width: '50%' }}>
+        <CardBody style={{ flex: '2' }}>
           <CardText>{vehicle.carEquipment}</CardText>
         </CardBody>
       </div>

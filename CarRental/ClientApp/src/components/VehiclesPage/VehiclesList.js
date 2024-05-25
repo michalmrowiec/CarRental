@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect, useContext } from 'react';
 import VehicleCard from './VehicleCard';
-import { Pagination, PaginationItem, PaginationLink, Input } from 'reactstrap';
+import { Pagination, PaginationItem, PaginationLink, Input, FormGroup, Label, Button, Row, Col } from 'reactstrap';
 import { ReservationContext } from '../../context/ReservationContext';
 
 const VehiclesList = () => {
@@ -11,9 +11,12 @@ const VehiclesList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
-  const [brandsToFiltier, setBrandsToFiltier] = useState({ 'Wszystkie': '' });
-  const [brand, setBrand] = useState('Wszystkie');
-  const [imageUrls, setImageUrls] = useState(null);
+  const [brand, setBrand] = useState('All');
+  const [brandsToFilter, setBrandsToFilter] = useState({ 'All': '' });
+
+  const [filterFrom, setFilterFrom] = useState('');
+  const [filterTo, setFilterTo] = useState('');
+  const [filterBrand, setFilterBrand] = useState('All');
 
   const { selectedDate } = useContext(ReservationContext);
 
@@ -24,12 +27,12 @@ const VehiclesList = () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        filters: 'brand@=' + brandsToFiltier[brand],
+        filters: 'brand@=' + brandsToFilter[filterBrand],
         sorts: '',
         page: page,
         pageSize: pageSize,
-        from: from === '' ? null : from,
-        to: to === '' ? null : to
+        from: filterFrom === '' ? null : filterFrom,
+        to: filterTo === '' ? null : filterTo
       })
     });
 
@@ -45,7 +48,7 @@ const VehiclesList = () => {
 
   useEffect(() => {
     fetchVehicles(currentPage, pageSize);
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, filterBrand, filterFrom, filterTo]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -66,13 +69,13 @@ const VehiclesList = () => {
       if (response.status === 200) {
         const data = await response.json();
         let brands = {
-          'Wszystkie': '', ...data.brand.reduce((obj, item) => {
+          'All': '', ...data.brand.reduce((obj, item) => {
             obj[item] = item;
             return obj;
           }, {})
         };
 
-        setBrandsToFiltier(brands);
+        setBrandsToFilter(brands);
       }
     };
 
@@ -83,32 +86,53 @@ const VehiclesList = () => {
     setCurrentPage(newPage);
   };
 
+  const applyFilters = () => {
+    setFilterFrom(from);
+    setFilterTo(to);
+    setFilterBrand(brand);
+  };
+
+  const clearFilters = () => {
+    setFrom('');
+    setTo('');
+    setBrand('All');
+    setFilterFrom('');
+    setFilterTo('');
+    setFilterBrand('All');
+  };
+
   return (
     <div className="container">
-      <select
-        value={brand}
-        onChange={(e) => setBrand(e.target.value)}
-      >
-        {Object.keys(brandsToFiltier).map((key) => (
-          <option key={key} value={key}>
-            {key}
-          </option>
-        ))}
-      </select>
-
-      <div>
-        <label>From: </label>
-        <Input type="date" onChange={(e) => setFrom(e.target.value)} value={from} />
-        <label>To: </label>
-        <Input type="date" onChange={(e) => setTo(e.target.value)} value={to} />
-        <button onClick={() => fetchVehicles(1, pageSize)}>Filtruj</button>
-        <button onClick={() => {
-          setFrom('');
-          setTo('');
-          setBrand('Wszystkie');
-          fetchVehicles(1, pageSize);
-        }}>Wyczyść filtry</button>
-      </div>
+      <Row className="mb-3">
+        <Col md={3}>
+          <FormGroup>
+            <Label for="brandSelect">Brand:</Label>
+            <Input type="select" id="brandSelect" value={brand} onChange={(e) => setBrand(e.target.value)}>
+              {Object.keys(brandsToFilter).map((key) => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
+            </Input>
+          </FormGroup>
+        </Col>
+        <Col md={3}>
+          <FormGroup>
+            <Label for="fromDate">From:</Label>
+            <Input type="date" id="fromDate" value={from} onChange={(e) => setFrom(e.target.value)} />
+          </FormGroup>
+        </Col>
+        <Col md={3}>
+          <FormGroup>
+            <Label for="toDate">To:</Label>
+            <Input type="date" id="toDate" value={to} onChange={(e) => setTo(e.target.value)} />
+          </FormGroup>
+        </Col>
+        <Col md={4} className="d-flex align-items-end">
+          <Button color="primary" className="me-2" onClick={applyFilters}>Filter</Button>
+          <Button color="secondary" onClick={clearFilters}>Clear Filters</Button>
+        </Col>
+      </Row>
 
       {vehicles.map((vehicle, index) => (
         <VehicleCard key={index} vehicle={vehicle} />
@@ -137,25 +161,13 @@ const VehiclesList = () => {
           </PaginationItem>
         </Pagination>
         <div className="ms-2 d-flex">
-          <select
-            className="form-select form-select-sm"
-            style={{ width: 'auto', marginBottom: '1rem' }}
-            value={pageSize}
-            onChange={(e) => {
-              const newSize = Number(e.target.value);
-              setPageSize(newSize);
-              handlePageChange(1); // Reset to first page with new page size
-            }}
-          >
+          <Input type="select" className="form-select form-select-sm me-2" style={{ width: 'auto' }} value={pageSize} onChange={(e) => { const newSize = Number(e.target.value); setPageSize(newSize); handlePageChange(1); }}>
             <option value={2}>2</option>
             <option value={10}>10</option>
             <option value={20}>20</option>
             <option value={50}>50</option>
-          </select>
-
-          <div className="ms-2">
-            Total items: {totalItems}
-          </div>
+          </Input>
+          <div className="ms-2">Total items: {totalItems}</div>
         </div>
       </div>
     </div>
