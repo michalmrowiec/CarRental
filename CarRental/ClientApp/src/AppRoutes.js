@@ -8,6 +8,7 @@ import AddVehicle  from "./components/VehiclesPage/AddVehicle";
 import AddVehicleImage  from "./components/VehiclesPage/AddVehicleImage";
 import MenageVehiclesList from "./components/VehiclesPage/MenageVehiclesList";
 import VehicleMain from "./components/VehiclesPage/VehicleMain";
+import EditVehicle from "./components/VehiclesPage/EditVehicle";
 
 const AppRoutes = [
     {
@@ -47,6 +48,9 @@ const AppRoutes = [
     },{
         path: '/VehicleMain',
         element: <VehicleMain />
+    },{
+        path: '/EditVehicle',
+        element: <EditVehicle />
     }
     
 ];

@@ -4,17 +4,11 @@
     margin-top: 45%;
   } */
 
-  .avaiableCheckBox label {
-    display: flex;
-    align-items: center;
-    margin-top: 8%;
-  }
   
   .form-check-input[type="checkbox"] {
     width: 1.25rem;
     height: 1.25rem;
-    margin-right: 0.5rem; /* Dodatkowy odstęp między checkboxem a tekstem */
-    /* margin-top: 45%; */
+    margin-right: 0.5rem;
   }
 
   .notification {

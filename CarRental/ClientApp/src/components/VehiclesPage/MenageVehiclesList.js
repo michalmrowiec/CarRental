@@ -4,13 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import  '../../style/MenagementVehicles.css';
 
 const MenageVehicleCard = ({ vehicle, onEdit, onAddPhoto }) => {
+  const handleEdit = () => {
+    onEdit(vehicle);
+  };
+
   return (
     <Col lg="3" md="4" sm="6" className="mb-4">
       <Card className="h-100 d-flex flex-column">
         <CardImg top className="img-fluid card-img-top" src={vehicle.image || 'placeholder-image-url'} alt={`${vehicle.brand} ${vehicle.model}`} />
         <CardBody>
           <CardTitle tag="h5">{vehicle.brand} {vehicle.model}</CardTitle>
-          <Button color="primary" onClick={() => onEdit(vehicle)}>Edit</Button>{' '}
+          <Button color="primary" onClick={handleEdit}>Edit</Button>{' '}
           <Button color="secondary" onClick={() => onAddPhoto(vehicle)}>Add Photo</Button>
         </CardBody>
       </Card>
@@ -50,7 +54,8 @@ const MenageVehiclesList = () => {
           brand: item.brand,
           model: item.model,
           image: item.coverImageUrl,
-          price: `${item.rentalNetPricePerDay} ${item.currency}`
+          price: `${item.rentalNetPricePerDay} ${item.currency}`,
+          vehicle : item
         })));
       } catch (error) {
         console.error('Błąd podczas pobierania listy pojazdów:', error);
@@ -61,8 +66,7 @@ const MenageVehiclesList = () => {
   }, []);
 
   const handleEdit = (vehicle) => {
-    console.log('Edytuj pojazd:', vehicle);
-    // Tutaj można dodać logikę edycji pojazdu
+    navigate(`/EditVehicle`, { state:  vehicle });
   };
 
   const handleAddPhoto = (vehicle) => {
