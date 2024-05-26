@@ -1,0 +1,19 @@
+.background-image-container {
+    position: relative; /* Ustawienie kontekstu dla pozycjonowania absolutnego */
+    width: 100%;
+  }
+  
+  .booking-widget-overlay {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%; /* Dostosuj szerokość zgodnie z potrzebami */
+    max-width: 600px; /* Maksymalna szerokość widgetu */
+    background-color: rgba(33, 63, 132, 0.907);
+  }
+  
+  /* Reszta stylów pozostaje bez zmian */
+  .booking-widget h2,.booking-widget label {
+    color: rgb(245, 243, 239);
+  }
