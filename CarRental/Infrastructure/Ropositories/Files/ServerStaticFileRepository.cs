@@ -1,4 +1,5 @@
 ﻿using CarRental.Application.Contracts.Files;
+using Microsoft.VisualBasic.FileIO;
 
 namespace CarRental.Infrastructure.Ropositories.Files
 {
@@ -32,6 +33,21 @@ namespace CarRental.Infrastructure.Ropositories.Files
             }
 
             return DeleteStatus.Deleted;
+        }
+
+        public string[] GetAllFiles(FileType filesType)
+        {
+            var directoryPath = Path.Combine(_basePath, filesType.ToString());
+            string[] files = Directory.GetFiles(directoryPath);
+
+            List<string> filesPaths = new();
+
+            foreach (var file in files)
+            {
+                filesPaths.Add(Path.Combine("images", filesType.ToString(), Path.GetFileName(file)));
+            }
+            return filesPaths.ToArray();
+
         }
 
         public async Task<(byte[] fileData, string filePath)> GetFileAsync(FileType fileType, string fileName)

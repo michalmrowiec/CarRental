@@ -2,6 +2,7 @@
 using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
 using CarRental.Application.Functions.Vehicles.Commands.DeleteVehicle;
 using CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle;
+using CarRental.Application.Functions.Vehicles.Queries.GetAllFiles;
 using CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredVehicles;
 using CarRental.Application.Functions.Vehicles.Queries.VehicleSortFilterOptions;
 using CarRental.Domain.Entities;
@@ -100,6 +101,18 @@ More info you can find here: github.com/Biarity/Sieve#send-a-request";
 
             if (result.Success)
                 return Ok();
+
+            return BadRequest(result.Message);
+        }
+
+        [Authorize(Roles = "admin,manager,employee")]
+        [HttpGet("images")]
+        public async Task<ActionResult> GetAllVehicleImages()
+        {
+            var result = await _mediator.Send(new GetAllFilesQuery(Application.Contracts.Files.FileType.VehicleImage));
+
+            if (result.Success)
+                return Ok(result.ReturnedObject);
 
             return BadRequest(result.Message);
         }
