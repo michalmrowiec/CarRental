@@ -1,4 +1,5 @@
 ﻿using CarRental.Application.Contracts.Files;
+using Microsoft.VisualBasic.FileIO;
 
 namespace CarRental.Infrastructure.Ropositories.Files
 {
@@ -34,7 +35,22 @@ namespace CarRental.Infrastructure.Ropositories.Files
             return DeleteStatus.Deleted;
         }
 
-        public async Task<byte[]> GetFileAsync(FileType fileType, string fileName)
+        public string[] GetAllFiles(FileType filesType)
+        {
+            var directoryPath = Path.Combine(_basePath, filesType.ToString());
+            string[] files = Directory.GetFiles(directoryPath);
+
+            List<string> filesPaths = new();
+
+            foreach (var file in files)
+            {
+                filesPaths.Add(Path.Combine("images", filesType.ToString(), Path.GetFileName(file)));
+            }
+            return filesPaths.ToArray();
+
+        }
+
+        public async Task<(byte[] fileData, string filePath)> GetFileAsync(FileType fileType, string fileName)
         {
             byte[] fileData = Array.Empty<byte>();
 
@@ -43,7 +59,7 @@ namespace CarRental.Infrastructure.Ropositories.Files
             if (!File.Exists(filePath))
             {
                 _logger.LogWarning("File {FileName} does not exists.", fileName);
-                return fileData;
+                return (fileData, Path.Combine("images", fileType.ToString(), fileName));
             }
 
             try
@@ -55,7 +71,7 @@ namespace CarRental.Infrastructure.Ropositories.Files
                 _logger.LogWarning(ex, "Unable to get {FileName} file.", fileName);
             }
 
-            return fileData;
+            return (fileData, Path.Combine("images", fileType.ToString(), fileName));
         }
 
         public async Task<string> SaveFileAsync(FileType fileType, byte[] fileData, string fileName)
@@ -82,7 +98,7 @@ namespace CarRental.Infrastructure.Ropositories.Files
                 return "";
             }
 
-            return Path.Combine("images", fileType.ToString(), fileName); ;
+            return Path.Combine("images", fileType.ToString(), fileName);
         }
     }
 }

@@ -27,15 +27,29 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddImage
             }
 
             Vehicle vehicle = vehicleResponse.ReturnedObject;
+            string filePath = string.Empty;
 
-            byte[] fileExist = await _fileRepository.GetFileAsync(FileType.VehicleImage, request.FileName) ?? Array.Empty<byte>();
+            (byte[] fileData, string filePath) fileExist = await _fileRepository.GetFileAsync(FileType.VehicleImage, request.FileName);
 
-            if (fileExist.Length != 0)
+            if (request.ImageData != null)
             {
-                return new ResponseBase<string>(false, "A file with this name already exists.", ResponseBase.ResponseStatus.BadQuery);
+                if (fileExist.fileData.Length != 0)
+                {
+                    return new ResponseBase<string>(false, "A file with this name already exists.", ResponseBase.ResponseStatus.BadQuery);
+                }
+
+                filePath = await _fileRepository.SaveFileAsync(FileType.VehicleImage, request.ImageData, request.FileName);
+            }
+            else
+            {
+                if (fileExist.fileData.Length == 0)
+                {
+                    return new ResponseBase<string>(false, "A file with this name does not exists.", ResponseBase.ResponseStatus.BadQuery);
+                }
+
+                filePath = fileExist.filePath;
             }
 
-            var filePath = await _fileRepository.SaveFileAsync(FileType.VehicleImage, request.ImageData, request.FileName);
 
             var updateVehicleCommand = new UpdateVehicleCommand
             {

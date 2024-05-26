@@ -2,6 +2,7 @@
 using CarRental.Application.Functions.Vehicles.Commands.AddVehicle;
 using CarRental.Application.Functions.Vehicles.Commands.DeleteVehicle;
 using CarRental.Application.Functions.Vehicles.Commands.UpdateVehicle;
+using CarRental.Application.Functions.Vehicles.Queries.GetAllFiles;
 using CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredVehicles;
 using CarRental.Application.Functions.Vehicles.Queries.VehicleSortFilterOptions;
 using CarRental.Domain.Entities;
@@ -74,10 +75,44 @@ More info you can find here: github.com/Biarity/Sieve#send-a-request";
             await file.CopyToAsync(memoryStream);
             imageData = memoryStream.ToArray();
 
-            var result = await _mediator.Send(new AddImageCommand(imageData, file.FileName, isCover, vehicleId));
+            var result = await _mediator.Send(
+                new AddImageCommand(
+                    ImageData: imageData,
+                    FileName: file.FileName,
+                    IsCover: isCover,
+                    VehicleId: vehicleId));
 
             if (result.Success)
                 return Created(result.ReturnedObject ?? "", null);
+
+            return BadRequest(result.Message);
+        }
+
+
+        [Authorize(Roles = "admin,manager,employee")]
+        [HttpPost("upload-image/{vehicleId}/{isCover}/{fileName}")]
+        public async Task<ActionResult> UpdateImage([FromRoute] Guid vehicleId, [FromRoute] bool isCover, [FromRoute] string fileName)
+        {
+            var result = await _mediator.Send(
+                new AddImageCommand(
+                    FileName: fileName,
+                    IsCover: isCover,
+                    VehicleId: vehicleId));
+
+            if (result.Success)
+                return Ok();
+
+            return BadRequest(result.Message);
+        }
+
+        [Authorize(Roles = "admin,manager,employee")]
+        [HttpGet("images")]
+        public async Task<ActionResult> GetAllVehicleImages()
+        {
+            var result = await _mediator.Send(new GetAllFilesQuery(Application.Contracts.Files.FileType.VehicleImage));
+
+            if (result.Success)
+                return Ok(result.ReturnedObject);
 
             return BadRequest(result.Message);
         }
