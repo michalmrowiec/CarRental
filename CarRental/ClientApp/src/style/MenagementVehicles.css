@@ -1,0 +1,12 @@
+.card-img-top {
+    width: 100%; /* Szerokość obrazu będzie zawsze równa szerokości karty */
+    height: 200px; /* Stała wysokość obrazu */
+    object-fit: cover; /* Obraz będzie pokrywał cały obszar, zachowując proporcje */
+    background-color: #eaeaea; /* Kolor tła dla obszaru obrazu, gdy obrazu nie ma */
+  }
+  
+  
+  .card {
+    min-height: 300px; /* Ustawia minimalną wysokość dla całej karty */
+  }
+  
