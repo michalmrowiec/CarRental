@@ -6,11 +6,15 @@ namespace CarRental.Infrastructure.Ropositories.Files
     public class ServerStaticFileRepository : IFileRepository
     {
         private readonly ILogger<ServerStaticFileRepository> _logger;
-        private readonly string _basePath = Path.Combine("ClientApp", "src", "images");
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private string _basePath;
 
-        public ServerStaticFileRepository(ILogger<ServerStaticFileRepository> logger)
+        public ServerStaticFileRepository(ILogger<ServerStaticFileRepository> logger, IWebHostEnvironment webHostEnvironment)
         {
             _logger = logger;
+            _webHostEnvironment = webHostEnvironment;
+
+            _basePath = Path.Combine(_webHostEnvironment.ContentRootPath, "ClientApp", "src", "images") ;
         }
 
         public DeleteStatus DeleteFile(string filePath)
