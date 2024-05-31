@@ -63,8 +63,8 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddVehicle
                 .WithMessage("Weight must be greater than or equal to 0.");
 
             RuleFor(v => v.NumberOfDoors)
-                .InclusiveBetween(1, 5)
-                .WithMessage("Number of Doors must be between 1 and 5.");
+                .InclusiveBetween(0, 20)
+                .WithMessage("Number of Doors must be between 0 and 20.");
 
             RuleFor(v => v.Seats)
                 .InclusiveBetween(1, 9)
