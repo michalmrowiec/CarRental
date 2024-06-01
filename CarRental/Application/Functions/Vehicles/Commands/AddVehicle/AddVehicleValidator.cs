@@ -67,8 +67,8 @@ namespace CarRental.Application.Functions.Vehicles.Commands.AddVehicle
                 .WithMessage("Number of Doors must be between 0 and 20.");
 
             RuleFor(v => v.Seats)
-                .InclusiveBetween(1, 9)
-                .WithMessage("Number of Seats must be between 1 and 9.");
+                .InclusiveBetween(1, 100)
+                .WithMessage("Number of Seats must be between 1 and 100.");
 
 
             RuleFor(v => v.CarEquipment)
