@@ -68,9 +68,9 @@ const NavMenu = () => {
                         <NavItem>
                             <NavLink tag={Link} className="text-dark text-decoration" to="/AboutUs">AboutUs</NavLink>
                         </NavItem>
-                        <NavItem>
-                            <NavLink tag={Link} className="text-dark text-decoration" to="/vehiclesList">Vehicles List</NavLink>
-                        </NavItem>
+                        {/*<NavItem>*/}
+                        {/*    <NavLink tag={Link} className="text-dark text-decoration" to="/vehiclesList">Vehicles List</NavLink>*/}
+                        {/*</NavItem>*/}
                         {isLoggedIn && (role === 'employee' || role === 'admin' || role === 'menager') && (
                         <NavItem>
                         <Dropdown isOpen={managementDropdownOpen} toggle={toggleManagementDropdown} innerref={dropdownRef} className="me-3">

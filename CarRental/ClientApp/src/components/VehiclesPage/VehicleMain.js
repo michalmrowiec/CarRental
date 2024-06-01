@@ -1,23 +1,35 @@
-﻿import React, { useContext, useState } from 'react';
-import { Row, Col, Button, Card, CardSubtitle, Form, FormGroup, Label, Input } from 'reactstrap';
-import UserContext from '../../context/UserContext';
-import { VehicleContext } from '../../context/VehicleContext';
-import { useNavigate } from 'react-router-dom';
+﻿import React, { useContext, useState } from "react";
+import {
+    Row,
+    Col,
+    Button,
+    Card,
+    CardSubtitle,
+    Form,
+    FormGroup,
+    Label,
+    Input,
+} from "reactstrap";
+import UserContext from "../../context/UserContext";
+import { VehicleContext } from "../../context/VehicleContext";
+import { useNavigate } from "react-router-dom";
+import { ReservationContext } from "../../context/ReservationContext";
 
 const VehicleMain = () => {
     const { selectedVehicle } = useContext(VehicleContext); // Use selectedVehicle from context
     const { state } = useContext(UserContext);
+    const { selectedDate } = useContext(ReservationContext);
     const isLoggedIn = state.token !== null;
     const navigate = useNavigate();
     const { state: userState } = useContext(UserContext);
-    const [pickupDate, setPickupDate] = useState('');
-    const [pickupTime, setPickupTime] = useState('10:00');
-    const [returnDate, setReturnDate] = useState('');
-    const [returnTime, setReturnTime] = useState('10:00');
     const [error, setError] = useState(null);
-    const [paymentMethod, setpaymentMethod] = useState('Credit Card');
-    const [paymentMethodToFilter, setPaymentMethodToFilter] = useState(['Credit Card', 'Debit Card', 'Blik', 'InpostPay']);
-
+    const [paymentMethod, setpaymentMethod] = useState("Credit Card");
+    const [paymentMethodToFilter, setPaymentMethodToFilter] = useState([
+        "Credit Card",
+        "Debit Card",
+        "Blik",
+        "InpostPay",
+    ]);
 
     if (!isLoggedIn) {
         return (
@@ -39,33 +51,30 @@ const VehicleMain = () => {
         );
     }
 
-    const handleSubmit = async event => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const startDate = new Date(`${pickupDate}T${pickupTime}`).toISOString();
-            const endDate = new Date(`${returnDate}T${returnTime}`).toISOString();
-
-            const response = await fetch('https://localhost:44403/api/v1/Rental', {
-                method: 'POST',
+            const response = await fetch("https://localhost:44403/api/v1/Rental", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userState.token}`
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${userState.token}`,
                 },
                 body: JSON.stringify({
-                    "vehicleId": selectedVehicle.id,
-                    "startDate": startDate,
-                    "endDate": endDate,
-                    "discountRate": 0,
-                    "paymentMethod": paymentMethod
-                })
+                    vehicleId: selectedVehicle.id,
+                    startDate: new Date(`${selectedDate.from}T${selectedDate.fromTime}`).toISOString(),
+                    endDate: new Date(`${selectedDate.to}T${selectedDate.toTime}`).toISOString(),
+                    discountRate: 0,
+                    paymentMethod: paymentMethod,
+                }),
             });
 
             if (response.ok) {
                 //alert('Car rent successfully!');
                 const data = await response.json();
-                navigate('/RentalSummary', { state: { data: data } });// Przekierowanie z powrotem do listy pojazdów
+                navigate("/RentalSummary", { state: { data: data } }); // Przekierowanie z powrotem do listy pojazdów
             } else {
-                setError('Failed to rent a car. Please try again.');
+                setError("Failed to rent a car. Please try again.");
             }
         } catch (error) {
             console.error("Błąd podczas próby zalogowania:", error);
@@ -74,24 +83,42 @@ const VehicleMain = () => {
 
     // Use data from selectedVehicle to render vehicle information
     return (
-        <div className="d-flex justify-content-center align-items-center" style={{ height: '100%', marginTop: '2%' }}>
+        <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ height: "100%", marginTop: "2%" }}
+        >
             <Row>
                 <Card className="my-3 p-3">
                     <Row>
                         <Col md="4">
-                            <img src={selectedVehicle.coverImageUrl || 'images\\VehicleImage\\sample_car.jpeg'} alt={`${selectedVehicle.brand} ${selectedVehicle.model}`} className="img-fluid" />
+                            <img
+                                src={
+                                    selectedVehicle.coverImageUrl ||
+                                    "images\\VehicleImage\\sample_car.jpeg"
+                                }
+                                alt={`${selectedVehicle.brand} ${selectedVehicle.model}`}
+                                className="img-fluid"
+                            />
                         </Col>
                         <Col md="8">
                             <Row>
                                 <Col md="8">
-                                    <h3>{selectedVehicle.brand} {selectedVehicle.model}</h3>
+                                    <h3>
+                                        {selectedVehicle.brand} {selectedVehicle.model}
+                                    </h3>
                                     <p>Transmission Type: {selectedVehicle.gearboxType}</p>
                                     <p>Number of Doors: {selectedVehicle.numberOfDoors}</p>
                                     <p>Seats: {selectedVehicle.seats}</p>
                                 </Col>
-                                <Col md="4">
-                                    <CardSubtitle tag="h6" className="mb-2 text-muted">{selectedVehicle.rentalNetPricePerDay}{selectedVehicle.currency}/day</CardSubtitle>
-                                    <CardSubtitle tag="h6" className="mb-2 text-muted">Estimated total: {selectedVehicle.rentalNetPricePerDay}{selectedVehicle.currency}</CardSubtitle>
+                                <Col md="4" style={{textAlign: 'right'} }>
+                                    <CardSubtitle tag="h6" className="mb-2 text-muted">
+                                        {selectedVehicle.rentalNetPricePerDay}
+                                        {selectedVehicle.currency}/day
+                                    </CardSubtitle>
+                                    <CardSubtitle tag="h6" className="mb-2 text-muted">
+                                        {selectedVehicle.estimatedTotalGrossAmount}
+                                        {selectedVehicle.currency}/total
+                                    </CardSubtitle>
                                 </Col>
                             </Row>
                             <Row>
@@ -109,8 +136,8 @@ const VehicleMain = () => {
                 </Card>
                 <Card className="my-3 p-3">
                     <Row>
-                        <Form className='p-1'>
-                            <Row >
+                        <Form className="p-1">
+                            <Row>
                                 <Col md={6}>
                                     <FormGroup>
                                         <Label for="pickupDate">Pick Up Date</Label>
@@ -118,9 +145,8 @@ const VehicleMain = () => {
                                             type="date"
                                             name="pickupDate"
                                             id="pickupDate"
-                                            value={pickupDate}
-                                            onChange={e => setPickupDate(e.target.value)}
-                                        />
+                                            value={selectedDate.from}
+                                            disabled />
                                     </FormGroup>
                                 </Col>
                                 <Col md={6}>
@@ -130,13 +156,12 @@ const VehicleMain = () => {
                                             type="time"
                                             name="pickupTime"
                                             id="pickupTime"
-                                            value={pickupTime}
-                                            onChange={e => setPickupTime(e.target.value)}
-                                        />
+                                            value={selectedDate.fromTime}
+                                            disabled />
                                     </FormGroup>
                                 </Col>
                             </Row>
-                            <Row >
+                            <Row>
                                 <Col md={6}>
                                     <FormGroup>
                                         <Label for="returnDate">Return Date</Label>
@@ -144,9 +169,8 @@ const VehicleMain = () => {
                                             type="date"
                                             name="returnDate"
                                             id="returnDate"
-                                            value={returnDate}
-                                            onChange={e => setReturnDate(e.target.value)}
-                                        />
+                                            value={selectedDate.to}
+                                            disabled />
                                     </FormGroup>
                                 </Col>
                                 <Col md={6}>
@@ -156,14 +180,19 @@ const VehicleMain = () => {
                                             type="time"
                                             name="returnTime"
                                             id="returnTime"
-                                            value={returnTime}
-                                            onChange={e => setReturnTime(e.target.value)}
+                                            value={selectedDate.toTime}
+                                            disabled
                                         />
                                     </FormGroup>
                                 </Col>
                                 <FormGroup>
-                                    <Label for="brandSelect">Brand:</Label>
-                                    <Input type="select" id="brandSelect" value={paymentMethod} onChange={(e) => setpaymentMethod(e.target.value)}>
+                                    <Label for="brandSelect">Payment method:</Label>
+                                    <Input
+                                        type="select"
+                                        id="brandSelect"
+                                        value={paymentMethod}
+                                        onChange={(e) => setpaymentMethod(e.target.value)}
+                                    >
                                         {paymentMethodToFilter.map((item) => (
                                             <option key={item} value={item}>
                                                 {item}
@@ -172,7 +201,15 @@ const VehicleMain = () => {
                                     </Input>
                                 </FormGroup>
                             </Row>
-                            <Button color="primary" onClick={handleSubmit}>Go</Button>
+                            <div>
+                                <CardSubtitle tag="h6" className="mb-2 text-muted">
+                                    Amount: {selectedVehicle.estimatedTotalGrossAmount}
+                                    {selectedVehicle.currency} (tax included)
+                                </CardSubtitle>
+                                <Button color="primary" onClick={handleSubmit}>
+                                    Pay
+                                </Button>
+                            </div>
                         </Form>
                     </Row>
                 </Card>
@@ -183,4 +220,3 @@ const VehicleMain = () => {
 };
 
 export default VehicleMain;
-

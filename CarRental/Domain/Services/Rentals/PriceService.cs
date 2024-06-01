@@ -12,7 +12,7 @@
             _discountRate = discountRate;
             _vatRate = vatRate;
             _netPricePerDay = netPricePerDay;
-            _days = days;
+            _days = days == 0 ? 1 : days;
         }
 
         public decimal GetTotalNetPriceWithoutDiscount()
