@@ -11,9 +11,9 @@ const VehicleMain = () => {
     const navigate = useNavigate();
     const { state: userState } = useContext(UserContext);
     const [pickupDate, setPickupDate] = useState('');
-    const [pickupTime, setPickupTime] = useState('');
+    const [pickupTime, setPickupTime] = useState('10:00');
     const [returnDate, setReturnDate] = useState('');
-    const [returnTime, setReturnTime] = useState('');
+    const [returnTime, setReturnTime] = useState('10:00');
     const [error, setError] = useState(null);
     const [paymentMethod, setpaymentMethod] = useState('Credit Card');
     const [paymentMethodToFilter, setPaymentMethodToFilter] = useState(['Credit Card', 'Debit Card', 'Blik', 'InpostPay']);
@@ -61,8 +61,9 @@ const VehicleMain = () => {
             });
 
             if (response.ok) {
-                alert('Car rent successfully!');
-                //navigate('/MenageVehiclesList'); // Przekierowanie z powrotem do listy pojazdów
+                //alert('Car rent successfully!');
+                const data = await response.json();
+                navigate('/RentalSummary', { state: { data: data } });// Przekierowanie z powrotem do listy pojazdów
             } else {
                 setError('Failed to rent a car. Please try again.');
             }
@@ -74,107 +75,109 @@ const VehicleMain = () => {
     // Use data from selectedVehicle to render vehicle information
     return (
         <div className="d-flex justify-content-center align-items-center" style={{ height: '100%', marginTop: '2%' }}>
-            <Card className="my-3 p-3">
-                <Row>
-                    <Col md="4">
-                        <img src={selectedVehicle.coverImageUrl || 'images\\VehicleImage\\sample_car.jpeg'} alt={`${selectedVehicle.brand} ${selectedVehicle.model}`} className="img-fluid" />
-                    </Col>
-                    <Col md="8">
-                        <Row>
-                            <Col md="8">
-                                <h3>{selectedVehicle.brand} {selectedVehicle.model}</h3>
-                                <p>Transmission Type: {selectedVehicle.gearboxType}</p>
-                                <p>Number of Doors: {selectedVehicle.numberOfDoors}</p>
-                                <p>Seats: {selectedVehicle.seats}</p>
-                            </Col>
-                            <Col md="4">
-                                <CardSubtitle tag="h6" className="mb-2 text-muted">{selectedVehicle.rentalNetPricePerDay}{selectedVehicle.currency}/day</CardSubtitle>
-                                <CardSubtitle tag="h6" className="mb-2 text-muted">Estimated total: {selectedVehicle.rentalNetPricePerDay}{selectedVehicle.currency}</CardSubtitle>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md="4">
-                                <h5>Equipment:</h5>
-                                <h5>{selectedVehicle.carEquipment}</h5>
-                            </Col>
-                            <Col md="8">
-                                <h5>Other Information:</h5>
-                                {/* Here you can add more vehicle details */}
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-            </Card>
-            <Card className="my-3 p-3">
-                <Row>
-                    <Form className='p-1'>
-                        <Row >
-                            <Col md={6}>
+            <Row>
+                <Card className="my-3 p-3">
+                    <Row>
+                        <Col md="4">
+                            <img src={selectedVehicle.coverImageUrl || 'images\\VehicleImage\\sample_car.jpeg'} alt={`${selectedVehicle.brand} ${selectedVehicle.model}`} className="img-fluid" />
+                        </Col>
+                        <Col md="8">
+                            <Row>
+                                <Col md="8">
+                                    <h3>{selectedVehicle.brand} {selectedVehicle.model}</h3>
+                                    <p>Transmission Type: {selectedVehicle.gearboxType}</p>
+                                    <p>Number of Doors: {selectedVehicle.numberOfDoors}</p>
+                                    <p>Seats: {selectedVehicle.seats}</p>
+                                </Col>
+                                <Col md="4">
+                                    <CardSubtitle tag="h6" className="mb-2 text-muted">{selectedVehicle.rentalNetPricePerDay}{selectedVehicle.currency}/day</CardSubtitle>
+                                    <CardSubtitle tag="h6" className="mb-2 text-muted">Estimated total: {selectedVehicle.rentalNetPricePerDay}{selectedVehicle.currency}</CardSubtitle>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col md="4">
+                                    <h5>Equipment:</h5>
+                                    <h5>{selectedVehicle.carEquipment}</h5>
+                                </Col>
+                                <Col md="8">
+                                    <h5>Other Information:</h5>
+                                    {/* Here you can add more vehicle details */}
+                                </Col>
+                            </Row>
+                        </Col>
+                    </Row>
+                </Card>
+                <Card className="my-3 p-3">
+                    <Row>
+                        <Form className='p-1'>
+                            <Row >
+                                <Col md={6}>
+                                    <FormGroup>
+                                        <Label for="pickupDate">Pick Up Date</Label>
+                                        <Input
+                                            type="date"
+                                            name="pickupDate"
+                                            id="pickupDate"
+                                            value={pickupDate}
+                                            onChange={e => setPickupDate(e.target.value)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col md={6}>
+                                    <FormGroup>
+                                        <Label for="pickupTime">Pick Up Time</Label>
+                                        <Input
+                                            type="time"
+                                            name="pickupTime"
+                                            id="pickupTime"
+                                            value={pickupTime}
+                                            onChange={e => setPickupTime(e.target.value)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row >
+                                <Col md={6}>
+                                    <FormGroup>
+                                        <Label for="returnDate">Return Date</Label>
+                                        <Input
+                                            type="date"
+                                            name="returnDate"
+                                            id="returnDate"
+                                            value={returnDate}
+                                            onChange={e => setReturnDate(e.target.value)}
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col md={6}>
+                                    <FormGroup>
+                                        <Label for="returnTime">Return Time</Label>
+                                        <Input
+                                            type="time"
+                                            name="returnTime"
+                                            id="returnTime"
+                                            value={returnTime}
+                                            onChange={e => setReturnTime(e.target.value)}
+                                        />
+                                    </FormGroup>
+                                </Col>
                                 <FormGroup>
-                                    <Label for="pickupDate">Pick Up Date</Label>
-                                    <Input
-                                        type="date"
-                                        name="pickupDate"
-                                        id="pickupDate"
-                                        value={pickupDate}
-                                        onChange={e => setPickupDate(e.target.value)}
-                                    />
+                                    <Label for="brandSelect">Brand:</Label>
+                                    <Input type="select" id="brandSelect" value={paymentMethod} onChange={(e) => setpaymentMethod(e.target.value)}>
+                                        {paymentMethodToFilter.map((item) => (
+                                            <option key={item} value={item}>
+                                                {item}
+                                            </option>
+                                        ))}
+                                    </Input>
                                 </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                                <FormGroup>
-                                    <Label for="pickupTime">Pick Up Time</Label>
-                                    <Input
-                                        type="time"
-                                        name="pickupTime"
-                                        id="pickupTime"
-                                        value={pickupTime}
-                                        onChange={e => setPickupTime(e.target.value)}
-                                    />
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                        <Row >
-                            <Col md={6}>
-                                <FormGroup>
-                                    <Label for="returnDate">Return Date</Label>
-                                    <Input
-                                        type="date"
-                                        name="returnDate"
-                                        id="returnDate"
-                                        value={returnDate}
-                                        onChange={e => setReturnDate(e.target.value)}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col md={6}>
-                                <FormGroup>
-                                    <Label for="returnTime">Return Time</Label>
-                                    <Input
-                                        type="time"
-                                        name="returnTime"
-                                        id="returnTime"
-                                        value={returnTime}
-                                        onChange={e => setReturnTime(e.target.value)}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <FormGroup>
-                                <Label for="brandSelect">Brand:</Label>
-                                <Input type="select" id="brandSelect" value={paymentMethod} onChange={(e) => setpaymentMethod(e.target.value)}>
-                                    {paymentMethodToFilter.map((item) => (
-                                        <option key={item} value={item}>
-                                            {item}
-                                        </option>
-                                    ))}
-                                </Input>
-                            </FormGroup>
-                        </Row>
-                        <Button color="primary" onClick={handleSubmit}>Go</Button>
-                    </Form>
-                </Row>
-            </Card>
-            {error && <div className="error-message">{error}</div>}
+                            </Row>
+                            <Button color="primary" onClick={handleSubmit}>Go</Button>
+                        </Form>
+                    </Row>
+                </Card>
+                {error && <div className="error-message">{error}</div>}
+            </Row>
         </div>
     );
 };

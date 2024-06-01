@@ -9,6 +9,7 @@ import AddVehicleImage  from "./components/VehiclesPage/AddVehicleImage";
 import MenageVehiclesList from "./components/VehiclesPage/MenageVehiclesList";
 import VehicleMain from "./components/VehiclesPage/VehicleMain";
 import EditVehicle from "./components/VehiclesPage/EditVehicle";
+import RentalSummary from "./components/RentalsPage/RentalSummary";
 
 const AppRoutes = [
     {
@@ -51,8 +52,10 @@ const AppRoutes = [
     },{
         path: '/EditVehicle',
         element: <EditVehicle />
+    }, {
+        path: '/RentalSummary',
+        element: <RentalSummary />
     }
-    
 ];
 
 export default AppRoutes;
