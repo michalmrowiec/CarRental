@@ -80,6 +80,7 @@ const NavMenu = () => {
                             <DropdownMenu>
                                 <DropdownItem tag={Link} className="text-dark text-decoration" to="/AddVehicle">Add Vehicle</DropdownItem>
                                 <DropdownItem tag={Link} className="text-dark text-decoration" to="/MenageVehiclesList">Menage Vehicles</DropdownItem>
+                                <DropdownItem tag={Link} className="text-dark text-decoration" to="/RentalList">Menage Reservations</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                         </NavItem>      

@@ -18,7 +18,7 @@ const VehicleCard = ({ vehicle }) => {
                 <CardImg style={{ height: '20vh', width: 'auto', objectFit: 'cover', flex: '0 0 auto' }} src={vehicle.coverImageUrl || 'images\\VehicleImage\\no_photo.jpg'} alt="Card image cap" />
                 <CardBody style={{ flex: '1' }}>
                     <CardTitle tag="h5">{vehicle.brand} {vehicle.model}</CardTitle>
-                    <CardSubtitle tag="h6" className="mb-2 text-muted">{vehicle.rentalNetPricePerDay}{vehicle.currency}/day</CardSubtitle>
+                    <CardSubtitle tag="h6" className="mb-2 text-muted">{vehicle.rentalNetPricePerDay} {vehicle.currency}/day</CardSubtitle>
                     <CardSubtitle tag="h6" className="mb-2 text-muted">
                         {vehicle.estimatedTotalGrossAmount}
                         {vehicle.currency}/total
