@@ -21,5 +21,7 @@
         public string Country { get; set; }
         public string PostalCode { get; set; }
         public bool IsActive { get; set; }
+
+        public IList<Rental>? Rentals { get; set; }
     }
 }

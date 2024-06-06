@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class RentalController : ControllerBase
@@ -27,7 +28,6 @@ namespace CarRental.API.Controllers
             _userContextService = userContextService;
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Vehicle>> MakeReservation([FromBody] AddReservationCommand addReservationCommand)
         {
@@ -45,7 +45,6 @@ namespace CarRental.API.Controllers
             return BadRequest(result.Message);
         }
 
-        [Authorize]
         [HttpPut("cancel/{RentalId}")]
         public async Task<ActionResult> CancelReservation([FromRoute] Guid RentalId)
         {
@@ -80,6 +79,7 @@ namespace CarRental.API.Controllers
             return BadRequest(result.Message);
         }
 
+        [Authorize(Roles = "admin,manager,employee")]
         [HttpPost("get-filtered")]
         public async Task<ActionResult<PagedResult<Rental>>> GetSortedAndFilteredRentals([FromBody] GetSortedAndFilteredRentalsQuery query)
         {
@@ -91,6 +91,7 @@ namespace CarRental.API.Controllers
             return BadRequest(result.Message);
         }
 
+        [Authorize(Roles = "admin,manager,employee")]
         [HttpOptions("get-filtered")]
         public async Task<ActionResult<object>> OptionsOfGetSortedAndFilteredRentals()
         {

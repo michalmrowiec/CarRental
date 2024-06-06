@@ -42,7 +42,7 @@ namespace CarRental.Infrastructure.Ropositories
         }
 
         public async Task<PagedResult<Vehicle>> GetSortedAndFilteredProductsAsync
-            (SieveModel sieveModel, DateTime freeFrom, DateTime freeTo)
+                    (SieveModel sieveModel, DateTime freeFrom, DateTime freeTo)
         {
             var rentals = await _context.Rentals
                                         .AsNoTracking()
@@ -50,20 +50,20 @@ namespace CarRental.Infrastructure.Ropositories
 
             var reservationService = new ReservationService(rentals);
 
-            var vehicles = _context.Vehicles
-                .AsQueryable();
-
-            var filteredVehicles = await _sieveProcessor
-                .Apply(sieveModel, vehicles)
+            var vehicles = await _context.Vehicles
                 .ToListAsync();
 
-            filteredVehicles = filteredVehicles
+            var availableVehicles = vehicles
                 .Where(v => reservationService.CheckReservationAvailability(v.Id, freeFrom, freeTo))
                 .ToList();
 
-            var totalCount = await _sieveProcessor
-                .Apply(sieveModel, vehicles, applyPagination: false, applySorting: false)
-                .CountAsync();
+            var filteredVehicles = _sieveProcessor
+                .Apply(sieveModel, availableVehicles.AsQueryable())
+                .ToList();
+
+            var totalCount = _sieveProcessor
+                .Apply(sieveModel, availableVehicles.AsQueryable(), applyPagination: false, applySorting: false)
+                .Count();
 
             return new PagedResult<Vehicle>
                 (filteredVehicles, totalCount, sieveModel.PageSize.Value, sieveModel.Page.Value);
