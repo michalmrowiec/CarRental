@@ -22,7 +22,7 @@
         public bool IsConfirmedByEmployee { get; set; }
         public bool IsCanceled { get; set; }
 
-        public Customer? Client { get; set; }
+        public User? Client { get; set; }
         public Employee? Employee { get; set; }
         public Vehicle? Vehicle { get; set; }
     }

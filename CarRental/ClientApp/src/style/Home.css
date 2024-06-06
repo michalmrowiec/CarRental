@@ -1,19 +1,53 @@
 .background-image-container {
-    position: relative; /* Ustawienie kontekstu dla pozycjonowania absolutnego */
-    width: 100%;
-  }
-  
-  .booking-widget-overlay {
+    /*    position: relative;
+*/ width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+h1 {
+    padding-top: 2%;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color:aliceblue;
+}
+
+.home-body {
+    height: 80vh;
+    width: auto;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../images/new_rental_background.jpg");
+    background-position: center 57%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 10px;
+    padding: 5%;
+}
+
+.booking-widget-overlay {
     position: absolute;
-    top: 42%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%; /* Dostosuj szerokość zgodnie z potrzebami */
-    max-width: 600px; /* Maksymalna szerokość widgetu */
+    width: 90%;
+    max-width: 600px;
     background-color: rgba(33, 63, 132, 0.907);
-  }
-  
-  /* Reszta stylów pozostaje bez zmian */
-  .booking-widget h2,.booking-widget label {
+    border-radius: 12px;
+    padding: 3%;
+}
+
+@media (max-width: 768px) {
+    .booking-widget-overlay {
+        top: 60%;
+    }
+}
+
+@media (max-width: 600px) {
+    .booking-widget-overlay {
+        top: 50%;
+    }
+}
+
+.booking-widget h2, .booking-widget label {
     color: rgb(245, 243, 239);
-  }
+}

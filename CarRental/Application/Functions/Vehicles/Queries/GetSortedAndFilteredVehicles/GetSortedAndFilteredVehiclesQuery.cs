@@ -5,7 +5,7 @@ using Sieve.Models;
 
 namespace CarRental.Application.Functions.Vehicles.Queries.GetSortedAndFilteredVehicles
 {
-    public class GetSortedAndFilteredVehiclesQuery : SieveModel, IRequest<ResponseBase<PagedResult<Vehicle>>>
+    public class GetSortedAndFilteredVehiclesQuery : SieveModel, IRequest<ResponseBase<PagedResult<VehicleDto>>>
     {
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
