@@ -36,6 +36,9 @@ namespace CarRental.Infrastructure.Ropositories
         public async Task<PagedResult<Rental>> GetSortedAndFilteredProductsAsync(SieveModel sieveModel)
         {
             var rentals = _context.Rentals
+                .Include(r => r.Vehicle)
+                .Include(r => r.Client)
+                .Include(r => r.Employee)
                 .AsQueryable();
 
             var filteredRentals = await _sieveProcessor
@@ -45,6 +48,21 @@ namespace CarRental.Infrastructure.Ropositories
             var totalCount = await _sieveProcessor
                 .Apply(sieveModel, rentals, applyPagination: false, applySorting: false)
                 .CountAsync();
+
+    //        try
+    //        {
+    //            var users = await _context.Users
+    //.AsNoTracking()
+    //.ToListAsync();
+    //        }
+    //        catch (Exception e)
+    //        {
+    //            Console.WriteLine(e.Message);
+    //            throw;
+    //        }
+
+
+            //filteredRentals.ForEach(r => { r.Client = users.FirstOrDefault(u => r.ClientId.Equals(u.Id)); });
 
             return new PagedResult<Rental>
                 (filteredRentals, totalCount, sieveModel.PageSize.Value, sieveModel.Page.Value);

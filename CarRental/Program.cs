@@ -91,7 +91,7 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddDbContext<CarRentalContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ContainerDb"));//ContainerDb
+    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDb")); // ContainerDb LocalDb
 });
 
 builder.Services.AddScoped<ISieveProcessor, CarRentalSieveProcessor>();

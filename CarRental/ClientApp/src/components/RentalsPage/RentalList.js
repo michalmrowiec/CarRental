@@ -29,7 +29,7 @@ const RentalList = () => {
                 },
                 body: JSON.stringify({
                     filters: "",
-                    sorts: "",
+                    sorts: "startDate",
                     page: page,
                     pageSize: pageSize
                 }),
@@ -57,14 +57,13 @@ const RentalList = () => {
 
     return (
         <div className="container">
-            <h1>Menage reservations</h1>
-            <Row className="row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-                {reservations.map((rental, index) => (
-                    <Col key={index}>
-                        <RentalCard rental={rental} />
-                    </Col>
-                ))}
-            </Row>
+            <h1 className="mb-4 pt-0" style={{ color: 'navy' }}>Menage reservations</h1>
+
+            {reservations.map((rental, index) => (
+                <Col key={index}>
+                    <RentalCard rental={rental} />
+                </Col>
+            ))}
 
             <Row className="mt-2">
                 <Col md={12} className="d-flex justify-content-center align-items-center">

@@ -25,10 +25,8 @@ const VehicleMain = () => {
     const [error, setError] = useState(null);
     const [paymentMethod, setpaymentMethod] = useState("Credit Card");
     const [paymentMethodToFilter, setPaymentMethodToFilter] = useState([
-        "Credit Card",
-        "Debit Card",
-        "Blik",
-        "InpostPay",
+        "Cash (upon pickup)",
+        "Online"
     ]);
 
     if (!isLoggedIn) {
