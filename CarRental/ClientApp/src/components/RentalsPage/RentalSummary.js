@@ -12,6 +12,7 @@ import {
 import UserContext from "../../context/UserContext";
 import { VehicleContext } from "../../context/VehicleContext"; // Import VehicleContext
 import { useLocation } from "react-router-dom";
+import RentalCard from "./RentalCard";
 
 const RentalSummary = () => {
   const location = useLocation();
@@ -44,7 +45,8 @@ const RentalSummary = () => {
   return (
     <div className="d-flex justify-content-center align-items-center">
       <p>{rentalDataResponse?.totalGrossAmount || "total gross amount none"}</p>
-      <p>{rentalDataResponse?.isPaid || "paid none"}</p>
+          <p>{rentalDataResponse?.isPaid || "paid none"}</p>
+
     </div>
   );
 };

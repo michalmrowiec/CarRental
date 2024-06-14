@@ -2,6 +2,7 @@
 using CarRental.Application.Functions.Rentals.Commands.AddReservation;
 using CarRental.Application.Functions.Rentals.Commands.CancelReservation;
 using CarRental.Application.Functions.Rentals.Commands.EmployeeConfirmReservation;
+using CarRental.Application.Functions.Rentals.Dtos;
 using CarRental.Application.Functions.Rentals.Queries.GetSortedAndFilteredRentals;
 using CarRental.Application.Functions.Rentals.Queries.RentalSortFilterOptions;
 using CarRental.Domain.Entities;
@@ -29,7 +30,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Vehicle>> MakeReservation([FromBody] AddReservationCommand addReservationCommand)
+        public async Task<ActionResult<ReservationDto>> MakeReservation([FromBody] AddReservationCommand addReservationCommand)
         {
             if (_userContextService.GetUserId != null)
                 addReservationCommand.ClientId = (Guid)_userContextService.GetUserId;
@@ -75,6 +76,19 @@ namespace CarRental.API.Controllers
 
             if (result.Status == Application.Functions.ResponseBase.ResponseStatus.NotFound)
                 return NotFound();
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("get-filtered/customer-rentals")]
+        public async Task<ActionResult<PagedResult<Rental>>> GetCustomerRentals([FromBody] GetSortedAndFilteredRentalsQuery query)
+        {
+            query.Filters = $"ClientId=={_userContextService.GetUserId}";
+
+            var result = await _mediator.Send(query);
+
+            if (result.Success)
+                return Ok(result.ReturnedObject);
 
             return BadRequest(result.Message);
         }

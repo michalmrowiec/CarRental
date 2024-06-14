@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import UserContext from '../../context/UserContext';
 
-const CustomerRentalList = () => {
+const RentalList = () => {
     const { state: userState } = useContext(UserContext);
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
@@ -20,7 +20,7 @@ const CustomerRentalList = () => {
 
     const fetchRentals = async (page, pageSize) => {
         const response = await fetch(
-            "https://localhost:44403/api/v1/Rental/get-filtered",
+            "https://localhost:44403/api/v1/Rental/get-filtered/customer-rentals",
             {
                 method: "POST",
                 headers: {
@@ -28,7 +28,6 @@ const CustomerRentalList = () => {
                     "Authorization": `Bearer ${userState.token}`
                 },
                 body: JSON.stringify({
-                    filters: "",
                     sorts: "startDate",
                     page: page,
                     pageSize: pageSize
@@ -57,11 +56,11 @@ const CustomerRentalList = () => {
 
     return (
         <div className="container">
-            <h1 className="mb-4 pt-0" style={{ color: 'navy' }}>Menage reservations</h1>
+            <h1 className="mb-4 pt-0" style={{ color: 'navy' }}>My reservations</h1>
 
             {reservations.map((rental, index) => (
                 <Col key={index}>
-                    <RentalCard rental={rental} isEmployee={true} />
+                    <RentalCard rental={rental} isEmployee={false} />
                 </Col>
             ))}
 
@@ -119,4 +118,4 @@ const CustomerRentalList = () => {
     );
 };
 
-export default CustomerRentalList;
+export default RentalList;

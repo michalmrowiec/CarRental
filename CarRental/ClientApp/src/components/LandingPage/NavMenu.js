@@ -66,7 +66,10 @@ const NavMenu = () => {
                             <NavLink tag={Link} className="text-dark text-decoration" to="/">Home</NavLink>
                         </NavItem>
                         <NavItem>
-                            <NavLink tag={Link} className="text-dark text-decoration" to="/AboutUs">AboutUs</NavLink>
+                            <NavLink tag={Link} className="text-dark text-decoration" to="/AboutUs">About Us</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink tag={Link} className="text-dark text-decoration " to="/CustomerRentalList">My Rentals</NavLink>
                         </NavItem>
                         {/*<NavItem>*/}
                         {/*    <NavLink tag={Link} className="text-dark text-decoration" to="/vehiclesList">Vehicles List</NavLink>*/}
@@ -87,7 +90,7 @@ const NavMenu = () => {
                         )}
                         {isLoggedIn ? (
                             <NavItem>
-                                <Dropdown isOpen={userDropdownOpen} toggle={toggleUserDropdown} innerref={dropdownRef}>
+                                <Dropdown isOpen={userDropdownOpen} toggle={toggleUserDropdown} innerref={dropdownRef} className="ms-3">
                                     <DropdownToggle caret className="btn btn-light d-flex align-items-center">
                                         <div className="">
                                             <img src={userLogo} alt='userLogo' className='mr-2 img-fluid user-logo'></img>
