@@ -1,18 +1,18 @@
 import { AboutUs } from "./components/LandingPage/AboutUs";
-import VehiclesList  from "./components/VehiclesPage/VehiclesList"
+import VehiclesList from "./components/VehiclesPage/VehiclesList"
 import { Home } from "./components/LandingPage/Home";
 import { Join } from "./components/Join";
 import { SignIn } from "./components/SignIn";
 import User from "./components/User";
-import AddVehicle  from "./components/VehiclesPage/AddVehicle";
-import AddVehicleImage  from "./components/VehiclesPage/AddVehicleImage";
+import AddVehicle from "./components/VehiclesPage/AddVehicle";
+import AddVehicleImage from "./components/VehiclesPage/AddVehicleImage";
 import MenageVehiclesList from "./components/VehiclesPage/MenageVehiclesList";
 import VehicleMain from "./components/VehiclesPage/VehicleMain";
 import EditVehicle from "./components/VehiclesPage/EditVehicle";
 import RentalSummary from "./components/RentalsPage/RentalSummary";
-import RentalList  from "./components/RentalsPage/RentalList";
+import RentalList from "./components/RentalsPage/RentalList";
 import CustomerRentalList from "./components/RentalsPage/CustomerRentalList";
-
+import EditRental from "./components/RentalsPage/EditRental";
 
 const AppRoutes = [
     {
@@ -46,13 +46,13 @@ const AppRoutes = [
     {
         path: '/AddVehicleImage',
         element: <AddVehicleImage />
-    },{
+    }, {
         path: '/MenageVehiclesList',
         element: <MenageVehiclesList />
-    },{
+    }, {
         path: '/VehicleMain',
         element: <VehicleMain />
-    },{
+    }, {
         path: '/EditVehicle',
         element: <EditVehicle />
     }, {
@@ -64,6 +64,9 @@ const AppRoutes = [
     }, {
         path: '/CustomerRentalList',
         element: <CustomerRentalList />
+    }, {
+        path: 'EditRental',
+        element: <EditRental />
     }
 ];
 

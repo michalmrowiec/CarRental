@@ -9,6 +9,7 @@ import {
     Col,
 } from "reactstrap";
 import UserContext from '../../context/UserContext';
+import { useNavigate } from "react-router-dom";
 
 const CustomerRentalList = () => {
     const { state: userState } = useContext(UserContext);
@@ -17,6 +18,7 @@ const CustomerRentalList = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [totalItems, setTotalItems] = useState(0);
     const [reservations, setReservations] = useState([]);
+    const navigate = useNavigate();
 
     const fetchRentals = async (page, pageSize) => {
         const response = await fetch(
@@ -55,13 +57,17 @@ const CustomerRentalList = () => {
         setCurrentPage(newPage);
     };
 
+    const handleEdit = (rental) => {
+        navigate(`/EditRental`, { state: rental });
+    };
+
     return (
         <div className="container">
             <h1 className="mb-4 pt-0" style={{ color: 'navy' }}>Menage reservations</h1>
 
             {reservations.map((rental, index) => (
                 <Col key={index}>
-                    <RentalCard rental={rental} isEmployee={true} />
+                    <RentalCard rental={rental} isEmployee={true} onEdit={handleEdit} />
                 </Col>
             ))}
 

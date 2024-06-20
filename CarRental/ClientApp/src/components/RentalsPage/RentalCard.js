@@ -1,9 +1,15 @@
 import React, { useContext } from 'react';
 import { Card, CardBody, CardSubtitle, Button } from 'reactstrap';
 import UserContext from '../../context/UserContext';
+import { useNavigate } from "react-router-dom";
 
-const RentalCard = ({ rental, isEmployee }) => {
+const RentalCard = ({ rental, isEmployee, onEdit }) => {
     const { state: userState } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    const handleEdit = () => {
+        onEdit(rental);
+    };
 
     const handleConfirm = async () => {
         if (!isEmployee) return;
@@ -81,7 +87,12 @@ const RentalCard = ({ rental, isEmployee }) => {
                     <span>Is returned: </span>{rental.isVehicleReturned === true ? <span>Yes</span> : <span>No</span>}
                 </div>
                 <div style={{ marginTop: '6px', bottom: '10px', left: '10px' }}>
-                    {isEmployee && <Button onClick={handleConfirm} disabled={rental.isConfirmedByEmployee} className="me-2" color="primary">Confirm</Button>}
+                    {isEmployee &&
+                        <>
+                            <Button onClick={handleConfirm} disabled={rental.isConfirmedByEmployee} className="me-2" color="primary">Confirm</Button>
+                            <Button onClick={handleEdit} className="me-2" color="warning">Edit</Button>
+                        </>
+                    }
                     <Button onClick={handleCancel} disabled={rental.isCanceled} color="danger">Cancel</Button>
                 </div>
             </CardBody>

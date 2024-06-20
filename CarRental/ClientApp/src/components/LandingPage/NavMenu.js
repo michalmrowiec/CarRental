@@ -76,6 +76,20 @@ const NavMenu = () => {
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark text-decoration " to="/CustomerRentalList">My Rentals</NavLink>
                                 </NavItem>
+                                {(role === 'employee' || role === 'admin' || role === 'menager') && (
+                                    <NavItem>
+                                        <Dropdown isOpen={managementDropdownOpen} toggle={toggleManagementDropdown} innerref={dropdownRef} className="me-3">
+                                            <DropdownToggle caret className="btn btn-light d-flex align-items-center bg-transparent border-0">
+                                                Management
+                                            </DropdownToggle>
+                                            <DropdownMenu>
+                                                <DropdownItem tag={Link} className="text-dark text-decoration" to="/AddVehicle">Add Vehicle</DropdownItem>
+                                                <DropdownItem tag={Link} className="text-dark text-decoration" to="/MenageVehiclesList">Menage Vehicles</DropdownItem>
+                                                <DropdownItem tag={Link} className="text-dark text-decoration" to="/RentalList">Menage Reservations</DropdownItem>
+                                            </DropdownMenu>
+                                        </Dropdown>
+                                    </NavItem>
+                                )}
                                 <NavItem>
                                     <Dropdown isOpen={userDropdownOpen} toggle={toggleUserDropdown} innerref={dropdownRef} className="ms-3">
                                         <DropdownToggle caret className="btn btn-light d-flex align-items-center">
@@ -100,20 +114,6 @@ const NavMenu = () => {
                                     <NavLink tag={Link} className="text-dark text-decoration" to="/SignIn">Sign-In</NavLink>
                                 </NavItem>
                             </>
-                        )}
-                        {isLoggedIn && (role === 'employee' || role === 'admin' || role === 'menager') && (
-                            <NavItem>
-                                <Dropdown isOpen={managementDropdownOpen} toggle={toggleManagementDropdown} innerref={dropdownRef} className="me-3">
-                                    <DropdownToggle caret className="btn btn-light d-flex align-items-center bg-transparent border-0">
-                                        Management
-                                    </DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem tag={Link} className="text-dark text-decoration" to="/AddVehicle">Add Vehicle</DropdownItem>
-                                        <DropdownItem tag={Link} className="text-dark text-decoration" to="/MenageVehiclesList">Menage Vehicles</DropdownItem>
-                                        <DropdownItem tag={Link} className="text-dark text-decoration" to="/RentalList">Menage Reservations</DropdownItem>
-                                    </DropdownMenu>
-                                </Dropdown>
-                            </NavItem>
                         )}
                     </ul>
                 </Collapse>
