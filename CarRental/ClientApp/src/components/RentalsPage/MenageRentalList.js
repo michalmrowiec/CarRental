@@ -9,18 +9,20 @@ import {
     Col,
 } from "reactstrap";
 import UserContext from '../../context/UserContext';
+import { useNavigate } from "react-router-dom";
 
-const MenageRentalList = () => {
+const RentalList = () => {
     const { state: userState } = useContext(UserContext);
     const [pageSize, setPageSize] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [totalItems, setTotalItems] = useState(0);
     const [reservations, setReservations] = useState([]);
+    const navigate = useNavigate();
 
     const fetchRentals = async (page, pageSize) => {
         const response = await fetch(
-            "https://localhost:44403/api/v1/Rental/get-filtered/customer-rentals",
+            "https://localhost:44403/api/v1/Rental/get-filtered",
             {
                 method: "POST",
                 headers: {
@@ -28,6 +30,7 @@ const MenageRentalList = () => {
                     "Authorization": `Bearer ${userState.token}`
                 },
                 body: JSON.stringify({
+                    filters: "",
                     sorts: "startDate",
                     page: page,
                     pageSize: pageSize
@@ -54,13 +57,17 @@ const MenageRentalList = () => {
         setCurrentPage(newPage);
     };
 
+    const handleEdit = (rental) => {
+        navigate(`/EditRental`, { state: { rental: rental } });
+    };
+
     return (
         <div className="container">
-            <h1 className="mb-4 pt-0" style={{ color: 'navy' }}>My reservations</h1>
+            <h1 className="mb-4 pt-0" style={{ color: 'navy' }}>Menage reservations</h1>
 
-            {reservations.map((rental, index) => (
-                <Col key={index}>
-                    <RentalCard rental={rental} isEmployee={false} />
+            {reservations.map((rental) => (
+                <Col>
+                    <RentalCard rental={rental} isEmployee={true} onEdit={handleEdit} />
                 </Col>
             ))}
 
@@ -118,4 +125,4 @@ const MenageRentalList = () => {
     );
 };
 
-export default MenageRentalList;
+export default RentalList;

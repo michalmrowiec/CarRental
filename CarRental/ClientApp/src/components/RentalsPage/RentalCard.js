@@ -1,11 +1,19 @@
 import React, { useContext } from 'react';
 import { Card, CardBody, CardSubtitle, Button } from 'reactstrap';
 import UserContext from '../../context/UserContext';
+import { useNavigate } from "react-router-dom";
 
-const RentalCard = ({ rental }) => {
+const RentalCard = ({ rental, isEmployee, onEdit }) => {
     const { state: userState } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    const handleEdit = () => {
+        onEdit(rental);
+    };
 
     const handleConfirm = async () => {
+        if (!isEmployee) return;
+
         const response = await fetch(
             `https://localhost:44403/api/v1/Rental/confirm/${rental.id}`,
             {
@@ -78,9 +86,19 @@ const RentalCard = ({ rental }) => {
                 <div>
                     <span>Is returned: </span>{rental.isVehicleReturned === true ? <span>Yes</span> : <span>No</span>}
                 </div>
+                {isEmployee &&
+                    <div>
+                        <span>Comments: </span>{rental.comments}
+                    </div>
+                }
                 <div style={{ marginTop: '6px', bottom: '10px', left: '10px' }}>
-                    <Button onClick={handleConfirm} disabled={rental.isConfirmedByEmployee} className="me-2" color="primary">Confirm</Button>
-                    <Button onClick={handleCancel} color="danger">Cancel</Button>
+                    {isEmployee &&
+                        <>
+                            <Button onClick={handleConfirm} disabled={rental.isConfirmedByEmployee} className="me-2" color="primary">Confirm</Button>
+                            <Button onClick={handleEdit} className="me-2" color="warning">Edit</Button>
+                        </>
+                    }
+                    <Button onClick={handleCancel} disabled={rental.isCanceled} color="danger">Cancel</Button>
                 </div>
             </CardBody>
         </Card>
