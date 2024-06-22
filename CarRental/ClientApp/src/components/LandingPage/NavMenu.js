@@ -74,7 +74,7 @@ const NavMenu = () => {
                         {isLoggedIn ? (
                             <>
                                 <NavItem>
-                                    <NavLink tag={Link} className="text-dark text-decoration " to="/CustomerRentalList">My Rentals</NavLink>
+                                    <NavLink tag={Link} className="text-dark text-decoration " to="/RentalList">My Rentals</NavLink>
                                 </NavItem>
                                 {(role === 'employee' || role === 'admin' || role === 'menager') && (
                                     <NavItem>
@@ -85,7 +85,7 @@ const NavMenu = () => {
                                             <DropdownMenu>
                                                 <DropdownItem tag={Link} className="text-dark text-decoration" to="/AddVehicle">Add Vehicle</DropdownItem>
                                                 <DropdownItem tag={Link} className="text-dark text-decoration" to="/MenageVehiclesList">Menage Vehicles</DropdownItem>
-                                                <DropdownItem tag={Link} className="text-dark text-decoration" to="/RentalList">Menage Reservations</DropdownItem>
+                                                <DropdownItem tag={Link} className="text-dark text-decoration" to="/MenageRentalList">Menage Reservations</DropdownItem>
                                             </DropdownMenu>
                                         </Dropdown>
                                     </NavItem>

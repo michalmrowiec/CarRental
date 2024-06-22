@@ -52,7 +52,7 @@ const RentalSummary = () => {
             <p>End Date: {rentalDataResponse?.endDate}</p>
             <p>Total Amount: ${rentalDataResponse?.totalGrossAmount.toFixed(2)}</p>
             <p>Status: {rentalDataResponse?.isPaid ? "Paid" : "Pending"}</p>
-            <Button color="primary" onClick={() => navigate("/CustomerRentalList")}>
+            <Button color="primary" onClick={() => navigate("/RentalList")}>
                 See all reservations
             </Button>
         </div>

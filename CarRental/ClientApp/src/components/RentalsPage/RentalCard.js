@@ -86,6 +86,11 @@ const RentalCard = ({ rental, isEmployee, onEdit }) => {
                 <div>
                     <span>Is returned: </span>{rental.isVehicleReturned === true ? <span>Yes</span> : <span>No</span>}
                 </div>
+                {isEmployee &&
+                    <div>
+                        <span>Comments: </span>{rental.comments}
+                    </div>
+                }
                 <div style={{ marginTop: '6px', bottom: '10px', left: '10px' }}>
                     {isEmployee &&
                         <>

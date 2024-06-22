@@ -40,6 +40,7 @@ namespace CarRental.Application.Functions.Rentals.Commands.UpdateReservation
             rental.IsVehicleReturned = request.IsVehicleReturned ?? rental.IsVehicleReturned;
             rental.IsPaid = request.IsPaid ?? rental.IsPaid;
             rental.PaymentMethod = request.PaymentMethod ?? rental.PaymentMethod;
+            rental.Comments = request.Comments ?? rental.Comments;
             rental.IsCanceled = request.IsCanceled ?? rental.IsCanceled;
             rental.UpdatedAt = DateTime.Now;
 

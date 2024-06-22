@@ -10,8 +10,8 @@ import MenageVehiclesList from "./components/VehiclesPage/MenageVehiclesList";
 import VehicleMain from "./components/VehiclesPage/VehicleMain";
 import EditVehicle from "./components/VehiclesPage/EditVehicle";
 import RentalSummary from "./components/RentalsPage/RentalSummary";
+import MenageRentalList from "./components/RentalsPage/MenageRentalList";
 import RentalList from "./components/RentalsPage/RentalList";
-import CustomerRentalList from "./components/RentalsPage/CustomerRentalList";
 import EditRental from "./components/RentalsPage/EditRental";
 
 const AppRoutes = [
@@ -59,13 +59,13 @@ const AppRoutes = [
         path: '/RentalSummary',
         element: <RentalSummary />
     }, {
+        path: '/MenageRentalList',
+        element: <MenageRentalList />
+    }, {
         path: '/RentalList',
         element: <RentalList />
     }, {
-        path: '/CustomerRentalList',
-        element: <CustomerRentalList />
-    }, {
-        path: 'EditRental',
+        path: '/EditRental',
         element: <EditRental />
     }
 ];
