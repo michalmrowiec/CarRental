@@ -64,7 +64,7 @@ function AddVehicle() {
         setNotification('Vehicle has been successfully added!');
         setTimeout(() => {
           setNotification(null);
-          navigate('/AddVehicleImage');
+          navigate('/MenageVehiclesList');
         }, 3000);
       } else {
         setNotification('Error while adding vehicle.');
